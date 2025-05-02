@@ -3,7 +3,8 @@ package wtf.file.api.editable;
 import wtf.file.api.WtfImage;
 import wtf.file.api.color.ColorSpace;
 import wtf.file.api.editable.animation.EditableAnimationInformation;
-import wtf.file.api.editable.compression.CompressionType;
+import wtf.file.api.editable.compression.DataCompressionType;
+import wtf.file.api.editable.compression.HeaderCompressionType;
 import wtf.file.api.editable.data.EditableFrame;
 import wtf.file.api.editable.metadata.EditableMetadataContainer;
 import wtf.file.api.exception.NumberOutOfBoundsException;
@@ -42,10 +43,18 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
     @Override
     EditableMetadataContainer metadataContainer();
 
-    void save(Path path, CompressionType compressionType) throws IOException;
+    void save(Path path, HeaderCompressionType headerCompressionType, DataCompressionType dataCompressionType) throws IOException;
+
+    default void save(Path path, HeaderCompressionType headerCompressionType) throws IOException {
+        save(path, headerCompressionType, DataCompressionType.MAPPED_COMPRESSION);
+    }
+
+    default void save(Path path, DataCompressionType dataCompressionType) throws IOException {
+        save(path, HeaderCompressionType.RUN_LENGTH_ENCODING, dataCompressionType);
+    }
 
     default void save(Path path) throws IOException {
-        save(path, CompressionType.MAPPED_COMPRESSION);
+        save(path, HeaderCompressionType.RUN_LENGTH_ENCODING, DataCompressionType.MAPPED_COMPRESSION);
     }
 
 }

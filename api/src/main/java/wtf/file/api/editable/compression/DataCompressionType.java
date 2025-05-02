@@ -1,6 +1,6 @@
 package wtf.file.api.editable.compression;
 
-public enum CompressionType {
+public enum DataCompressionType {
 
     NO_COMPRESSION(false, false),
     INLINE_COMPRESSION(false, true),
@@ -11,7 +11,7 @@ public enum CompressionType {
     private final boolean useReference;
 
 
-    CompressionType(boolean useHuffman, boolean useReference) {
+    DataCompressionType(boolean useHuffman, boolean useReference) {
         this.useHuffman = useHuffman;
         this.useReference = useReference;
     }
