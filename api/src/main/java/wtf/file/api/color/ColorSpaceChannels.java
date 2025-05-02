@@ -5,7 +5,7 @@ import wtf.file.api.color.channel.FixedColorChannel;
 
 class ColorSpaceChannels {
 
-    static final FixedColorChannel FIXED_ALPHA = new FixedColorChannel((short) 1, "alpha");
+    static final FixedColorChannel FIXED_ALPHA = new FixedColorChannel("alpha", (short) 1);
     static final DynamicColorChannel DYNAMIC_ALPHA = new DynamicColorChannel("alpha");
 
     static final DynamicColorChannel GRAY = new DynamicColorChannel("gray");

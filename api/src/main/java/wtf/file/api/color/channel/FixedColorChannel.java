@@ -1,6 +1,6 @@
 package wtf.file.api.color.channel;
 
-public record FixedColorChannel(short bits, String name) implements ColorChannel {
+public record FixedColorChannel(String name, short bits) implements ColorChannel {
 
     @Override
     public ChannelType type() {

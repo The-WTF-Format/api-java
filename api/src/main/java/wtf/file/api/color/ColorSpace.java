@@ -1,8 +1,12 @@
 package wtf.file.api.color;
 
 import wtf.file.api.color.channel.ColorChannel;
+import wtf.file.api.color.value.DefaultValue;
+import wtf.file.api.color.value.ZeroDefaultValue;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static wtf.file.api.color.ColorSpaceChannels.*;
 
@@ -33,6 +37,17 @@ public enum ColorSpace {
 
     public List<ColorChannel> channels() {
         return channels;
+    }
+
+    public Map<ColorChannel, DefaultValue> defaultColor() {
+        final Map<ColorChannel, DefaultValue> defaultColor = new HashMap<>();
+
+        // current default is for all channels 0 (black or transparent)
+        for (ColorChannel channel : channels) {
+            defaultColor.put(channel, ZeroDefaultValue.INSTANCE);
+        }
+
+        return defaultColor;
     }
     
 }
