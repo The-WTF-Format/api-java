@@ -10,7 +10,7 @@ public interface EditableMetadataContainer extends MetadataContainer {
      * @param key
      * @throws IllegalCharacterException
      */
-    void remove(String key);
+    void remove(String key) throws IllegalCharacterException;
 
     /**
      *
@@ -18,6 +18,6 @@ public interface EditableMetadataContainer extends MetadataContainer {
      * @param value
      * @throws IllegalCharacterException
      */
-    void set(String key, String value);
+    void set(String key, String value) throws IllegalCharacterException;
 
 }

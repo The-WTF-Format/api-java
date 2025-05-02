@@ -16,7 +16,7 @@ public interface EditablePixel extends Pixel {
      * @param values
      * @throws NumberOutOfBoundsException
      */
-    void setValues(Map<ColorChannel, Long> values);
+    void setValues(Map<ColorChannel, Long> values) throws NumberOutOfBoundsException;
 
     /**
      *
@@ -24,6 +24,6 @@ public interface EditablePixel extends Pixel {
      * @return
      * @throws NumberOutOfBoundsException
      */
-    void setValue(ColorChannel channel, long value);
+    void setValue(ColorChannel channel, long value) throws NumberOutOfBoundsException;
 
 }

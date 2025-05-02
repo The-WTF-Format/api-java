@@ -11,22 +11,23 @@ public interface EditableAnimationInformation extends AnimationInformation  {
      * @return
      * @throws NumberOutOfBoundsException
      */
-    void setFrames(int frames);
+    void setFrames(int frames) throws NumberOutOfBoundsException;
 
     /**
      *
      * @param framesPerSecond
      * @throws NumberOutOfBoundsException
      */
-    void setFramesPerSecond(int framesPerSecond);
+    void setFramesPerSecond(int framesPerSecond) throws NumberOutOfBoundsException;
 
     /**
      *
      * @param secondsPerFrame
      * @throws NumberOutOfBoundsException
      */
-    void setSecondsPerFrame(int secondsPerFrame);
+    void setSecondsPerFrame(int secondsPerFrame) throws NumberOutOfBoundsException;
 
+    @Override
     EditableFrame frame(int index);
 
 }

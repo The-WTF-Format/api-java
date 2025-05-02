@@ -15,7 +15,7 @@ public interface EditableFrame extends Frame {
      * @throws NumberOutOfBoundsException
      */
     @Override
-    EditablePixel at(int x, int y);
+    EditablePixel at(int x, int y) throws NumberOutOfBoundsException;
 
     void byJavaImage(Image image);
 

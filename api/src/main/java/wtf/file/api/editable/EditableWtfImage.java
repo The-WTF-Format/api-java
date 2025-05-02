@@ -19,14 +19,14 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
      * @param width
      * @throws NumberOutOfBoundsException
      */
-    void setWidth(int width);
+    void setWidth(int width) throws NumberOutOfBoundsException;
 
     /**
      *
      * @param height
      * @throws NumberOutOfBoundsException
      */
-    void setHeight(int height);
+    void setHeight(int height) throws NumberOutOfBoundsException;
 
     void setColorSpace(ColorSpace colorSpace);
 
@@ -35,7 +35,7 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
      * @param channelWidth
      * @throws NumberOutOfBoundsException
      */
-    void setChannelWidth(short channelWidth);
+    void setChannelWidth(short channelWidth) throws NumberOutOfBoundsException;
 
     @Override
     EditableAnimationInformation animationInformation();

@@ -15,7 +15,7 @@ public interface Frame {
      * @return
      * @throws NumberOutOfBoundsException
      */
-    Pixel at(int x, int y);
+    Pixel at(int x, int y) throws NumberOutOfBoundsException;
 
     Image asJavaImage();
 
