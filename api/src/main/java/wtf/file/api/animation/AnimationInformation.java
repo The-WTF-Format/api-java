@@ -7,7 +7,6 @@ import wtf.file.api.exception.NumberOutOfBoundsException;
  * Represents metadata and behavior for an animated object, including frame data
  * and timing information.
  */
-
 public interface AnimationInformation {
 
     /**
@@ -15,7 +14,6 @@ public interface AnimationInformation {
      *
      * @return the number of frames
      */
-
     int frames();
 
     /**
