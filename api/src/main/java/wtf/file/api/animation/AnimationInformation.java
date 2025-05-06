@@ -45,14 +45,14 @@ public interface AnimationInformation {
     /**
      * Returns the number of frames per second, if timing is FPS-coded.
      *
-     * @return the frames per second value
+     * @return the frames per second value, or {@code null} if SPF-coded
      */
     int framesPerSecond();
 
     /**
      * Returns the number of seconds per frame, if timing is SPF-coded.
      *
-     * @return the seconds per frame value
+     * @return the seconds per frame value, or {@code null} if FPS-coded
      */
     int secondsPerFrame();
 

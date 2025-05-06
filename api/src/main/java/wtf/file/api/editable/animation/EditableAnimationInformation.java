@@ -15,23 +15,28 @@ import wtf.file.api.exception.NumberOutOfBoundsException;
 public interface EditableAnimationInformation extends AnimationInformation  {
 
     /**
+     * Sets the number of frames.
      *
-     * @return
-     * @throws NumberOutOfBoundsException
+     * @param frames the number of frames to set
+     * @throws NumberOutOfBoundsException if the specified number of frames is out of the valid range
      */
     void setFrames(int frames) throws NumberOutOfBoundsException;
 
     /**
+     * Sets the frame rate in frames per second (FPS).
+     * This method is used when the timing is FPS-coded.
      *
-     * @param framesPerSecond
-     * @throws NumberOutOfBoundsException
+     * @param framesPerSecond the number of frames per second to set
+     * @throws NumberOutOfBoundsException if the specified FPS value is out of the valid range
      */
     void setFramesPerSecond(int framesPerSecond) throws NumberOutOfBoundsException;
 
     /**
+     * Sets the duration of a frame in seconds.
+     * This method is used when the timing is SPF-coded.
      *
-     * @param secondsPerFrame
-     * @throws NumberOutOfBoundsException
+     * @param secondsPerFrame the duration of a single frame in seconds
+     * @throws NumberOutOfBoundsException if the specified SPF value is out of the valid range
      */
     void setSecondsPerFrame(int secondsPerFrame) throws NumberOutOfBoundsException;
 
