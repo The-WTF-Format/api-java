@@ -7,12 +7,32 @@ import wtf.file.api.exception.WtfException;
 import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * The WtfLoader class is used to handle the creation and loading of WtfImage objects.
+ * It provides methods to load images from a file path and to initiate the building of new images.
+ */
 public class WtfLoader {
 
+    /**
+     * Creates a WtfImage instance by loading it from the specified path.
+     *
+     * @param path the path to load the WtfImage from
+     * @return the loaded WtfImage instance
+     * @throws WtfException if there is an issue specific to WtfImage loading.
+     *                      e.g., an unknown version or to few or many bytes
+     * @throws IOException if an I/O error occurs during the loading process
+     * @see WtfImage
+     */
     public WtfImage from(Path path) throws WtfException, IOException {
         throw new NotYetImplementedException("Loading from path");
     }
 
+    /**
+     * Initiates the building process for a new instance of WtfImage using the WtfImageBuilder.
+     *
+     * @return a new instance of WtfImageBuilder, which provides methods to configure and build a WtfImage.
+     * @see WtfImageBuilder
+     */
     public WtfImageBuilder by() {
         return new WtfImageBuilder();
     }
