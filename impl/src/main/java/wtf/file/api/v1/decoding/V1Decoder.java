@@ -3,15 +3,18 @@ package wtf.file.api.v1.decoding;
 import org.jetbrains.annotations.NotNull;
 import wtf.file.api.WtfImage;
 import wtf.file.api.exception.NotYetImplementedException;
+import wtf.file.api.exception.WtfException;
 import wtf.file.api.v1.decoding.clut.ClutDecoder;
 import wtf.file.api.v1.decoding.data.ImageDataDecoder;
 import wtf.file.api.v1.decoding.header.HeaderDecoder;
 import wtf.file.api.v1.decoding.metadata.MetadataDecoder;
+import wtf.file.api.v1.impl.WtfImageImpl;
+import wtf.file.api.version.Version;
 
 public class V1Decoder {
 
     @NotNull
-    public static WtfImage decode(byte[] bytes) {
+    public static WtfImage decode(byte[] bytes) throws WtfException {
         var headerPair = HeaderDecoder.decode(bytes);
         var headerInformation = headerPair.first();
 
@@ -24,7 +27,7 @@ public class V1Decoder {
         var imageDataPair = ImageDataDecoder.decode(headerInformation, clutInformation, metadataPair.second());
         var imageData = imageDataPair.first();
 
-        throw new NotYetImplementedException();
+        return new WtfImageImpl(headerInformation);
     }
 
 }

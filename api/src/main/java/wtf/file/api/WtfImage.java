@@ -61,7 +61,7 @@ public interface WtfImage extends Frame {
      * @return the channel width in bits
      * @see ColorSpace
      */
-    short channelWidth();
+    int channelWidth();
 
     /**
      * Retrieves animation information associated with the image.

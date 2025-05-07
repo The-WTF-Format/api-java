@@ -3,12 +3,13 @@ package wtf.file.api.decoding;
 import org.jetbrains.annotations.NotNull;
 import wtf.file.api.WtfImage;
 import wtf.file.api.decoding.version.VersionDecoder;
+import wtf.file.api.exception.WtfException;
 import wtf.file.api.v1.decoding.V1Decoder;
 
 public class WtfDecoder {
 
     @NotNull
-    public static WtfImage decode(byte[] bytes) {
+    public static WtfImage decode(byte[] bytes) throws WtfException {
         var version = VersionDecoder.decode(bytes);
 
         return switch (version.first()) {

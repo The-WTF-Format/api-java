@@ -31,7 +31,7 @@ public class EditableWtfImageImpl implements EditableWtfImage {
     }
 
     @Override
-    public void setChannelWidth(short channelWidth) throws NumberOutOfBoundsException {
+    public void setChannelWidth(int channelWidth) throws NumberOutOfBoundsException {
 
     }
 
@@ -56,7 +56,7 @@ public class EditableWtfImageImpl implements EditableWtfImage {
     }
 
     @Override
-    public short channelWidth() {
+    public int channelWidth() {
         return 0;
     }
 

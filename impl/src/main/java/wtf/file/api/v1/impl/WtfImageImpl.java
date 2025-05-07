@@ -7,40 +7,56 @@ import wtf.file.api.data.Pixel;
 import wtf.file.api.editable.EditableWtfImage;
 import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.metadata.MetadataContainer;
+import wtf.file.api.v1.decoding.header.HeaderInformation;
+import wtf.file.api.v1.impl.animation.AnimationInformationImpl;
 import wtf.file.api.version.Version;
 
 import java.awt.*;
 
 public class WtfImageImpl implements WtfImage {
 
+    private final int width;
+    private final int height;
+    private final ColorSpace colorSpace;
+    private final int channelWidth;
+    private final AnimationInformation animationInformation;
+
+    public WtfImageImpl(HeaderInformation headerInformation) {
+        this.width = headerInformation.width();
+        this.height = headerInformation.height();
+        this.colorSpace = headerInformation.colorSpace();
+        this.channelWidth = headerInformation.channelWidth();
+        this.animationInformation = new AnimationInformationImpl(headerInformation);
+    }
+
     @Override
     public Version version() {
-        return null;
+        return Version.VERSION_1;
     }
 
     @Override
     public int width() {
-        return 0;
+        return this.width;
     }
 
     @Override
     public int height() {
-        return 0;
+        return this.height;
     }
 
     @Override
     public ColorSpace colorSpace() {
-        return null;
+        return this.colorSpace;
     }
 
     @Override
-    public short channelWidth() {
-        return 0;
+    public int channelWidth() {
+        return this.channelWidth;
     }
 
     @Override
     public AnimationInformation animationInformation() {
-        return null;
+        return this.animationInformation;
     }
 
     @Override
