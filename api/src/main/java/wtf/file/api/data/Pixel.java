@@ -26,7 +26,7 @@ public interface Pixel {
      * Returns the mapping of {@link ColorChannel} to their corresponding numeric values
      * for this pixel.
      *
-     * @return a map of {@link ColorChannel} to {@code long} values.
+     * @return a map of {@link ColorChannel} to {@code short} values.
      */
     Map<ColorChannel, Short> values();
 
