@@ -1,6 +1,7 @@
 package wtf.file.api.editable.data;
 
 import wtf.file.api.data.Frame;
+import wtf.file.api.data.Pixel;
 import wtf.file.api.exception.NumberOutOfBoundsException;
 
 import java.awt.*;
@@ -12,6 +13,9 @@ import java.awt.*;
  * </p>
  */
 public interface EditableFrame extends Frame {
+
+    @Override
+    EditablePixel[][] pixels();
 
     /**
      * Retrieves an editable pixel at the specified (x, y) coordinate.

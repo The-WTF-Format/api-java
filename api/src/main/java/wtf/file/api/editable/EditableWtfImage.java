@@ -4,7 +4,6 @@ import wtf.file.api.WtfImage;
 import wtf.file.api.color.ColorSpace;
 import wtf.file.api.editable.animation.EditableAnimationInformation;
 import wtf.file.api.editable.compression.DataCompressionType;
-import wtf.file.api.editable.compression.HeaderCompressionType;
 import wtf.file.api.editable.data.EditableFrame;
 import wtf.file.api.editable.metadata.EditableMetadataContainer;
 import wtf.file.api.exception.NumberOutOfBoundsException;
@@ -92,45 +91,20 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
      * Saves the current editable image to the specified file path using the provided compression settings.
      *
      * @param path the file path where the image will be saved; must not be null
-     * @param headerCompressionType the type of compression applied to the image header; must not be null
      * @param dataCompressionType the type of compression applied to the image data; must not be null
      * @throws IOException if an I/O error occurs during the save operation
      */
-    void save(Path path, HeaderCompressionType headerCompressionType, DataCompressionType dataCompressionType) throws IOException;
-
-    /**
-     * Saves the current editable image to the specified file path using the provided header compression setting.
-     * This is a default implementation that applies mapped compression to the image data.
-     *
-     * @param path the file path where the image will be saved; must not be null
-     * @param headerCompressionType the type of compression applied to the image header; must not be null
-     * @throws IOException if an I/O error occurs during the save operation
-     */
-    default void save(Path path, HeaderCompressionType headerCompressionType) throws IOException {
-        save(path, headerCompressionType, DataCompressionType.MAPPED_COMPRESSION);
-    }
-
-    /**
-     * Saves the current editable image to the specified file path using the provided data compression setting.
-     * This is a default implementation that applies run-length encoding to the image header.
-     *
-     * @param path the file path where the image will be saved; must not be null
-     * @param dataCompressionType the type of compression applied to the image data; must not be null
-     * @throws IOException if an I/O error occurs during the save operation
-     */
-    default void save(Path path, DataCompressionType dataCompressionType) throws IOException {
-        save(path, HeaderCompressionType.RUN_LENGTH_ENCODING, dataCompressionType);
-    }
+    void save(Path path, DataCompressionType dataCompressionType) throws IOException;
 
     /**
      * Saves the current editable image to the specified file path using default compression settings.
-     * The default settings use run-length encoding for the header compression and mapped compression for the data.
+     * The default settings use mapped compression for the data.
      *
      * @param path the file path where the image will be saved; must not be null
      * @throws IOException if an I/O error occurs during the save operation
      */
     default void save(Path path) throws IOException {
-        save(path, HeaderCompressionType.RUN_LENGTH_ENCODING, DataCompressionType.MAPPED_COMPRESSION);
+        save(path, DataCompressionType.MAPPED_COMPRESSION);
     }
 
 }

@@ -26,9 +26,9 @@ public interface Pixel {
      * Returns the mapping of {@link ColorChannel} to their corresponding numeric values
      * for this pixel.
      *
-     * @return a map of {@link ColorChannel} to {@code long} values.
+     * @return a map of {@link ColorChannel} to {@code short} values.
      */
-    Map<ColorChannel, Long> values();
+    Map<ColorChannel, Short> values();
 
     /**
      * Retrieves the numeric value associated with a specific color channel.
@@ -37,7 +37,7 @@ public interface Pixel {
      * @return the value of the specified channel.
      * @throws IllegalArgumentException if the channel is not part of this pixel's {@link ColorSpace}.
      */
-    long valueOf(ColorChannel channel);
+    short valueOf(ColorChannel channel);
 
     /**
      * Converts this pixel to the given {@link ColorSpace}, potentially performing

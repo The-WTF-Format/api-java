@@ -26,7 +26,7 @@ public interface EditablePixel extends Pixel {
      * @param values a map of color channels to their corresponding pixel values.
      * @throws NumberOutOfBoundsException if any of the values exceed the allowed range for that channel.
      */
-    void setValues(Map<ColorChannel, Long> values) throws NumberOutOfBoundsException;
+    void setValues(Map<ColorChannel, Short> values) throws NumberOutOfBoundsException;
 
     /**
      * Sets the value for a specific color channel in this pixel.
@@ -35,6 +35,6 @@ public interface EditablePixel extends Pixel {
      * @param value   the new value to set for the specified channel.
      * @throws NumberOutOfBoundsException if the value is out of the allowed range for the specified channel.
      */
-    void setValue(ColorChannel channel, long value) throws NumberOutOfBoundsException;
+    void setValue(ColorChannel channel, short value) throws NumberOutOfBoundsException;
 
 }
