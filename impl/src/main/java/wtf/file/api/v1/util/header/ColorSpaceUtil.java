@@ -8,6 +8,7 @@ import java.util.Map;
 public class ColorSpaceUtil {
 
     private static Map<Byte, ColorSpace> colorSpaceMap;
+    private static Map<ColorSpace, Byte> reverseColorSpaceMap;
 
     public static Map<Byte, ColorSpace> colorSpaceMap() {
         if (colorSpaceMap == null) {
@@ -31,6 +32,18 @@ public class ColorSpaceUtil {
         }
 
         return colorSpaceMap;
+    }
+
+    public static Map<ColorSpace, Byte> reverseColorSpaceMap() {
+        if (reverseColorSpaceMap == null) {
+            reverseColorSpaceMap = new HashMap<>();
+
+            for (Map.Entry<Byte, ColorSpace> byteColorSpaceEntry : colorSpaceMap().entrySet()) {
+                reverseColorSpaceMap.put(byteColorSpaceEntry.getValue(), byteColorSpaceEntry.getKey());
+            }
+        }
+
+        return reverseColorSpaceMap;
     }
 
 }
