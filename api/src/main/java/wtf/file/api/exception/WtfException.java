@@ -1,11 +1,10 @@
 package wtf.file.api.exception;
 
 /**
- * A custom exception that serves as a base exception for errors within the "wtf" file API.
+ * Thrown to indicate that an image contains broken or corrupt data.
  * <p>
- * This exception is used for handling general errors that do not fall under specific
- * categories such as value errors or out-of-bounds errors, but still require custom exception
- * handling in the API.
+ * This exception is used specifically to signal issues encountered while processing
+ * image files that are invalid, damaged, or otherwise unreadable due to corruption.
  * </p>
  */
 public class WtfException extends Exception {

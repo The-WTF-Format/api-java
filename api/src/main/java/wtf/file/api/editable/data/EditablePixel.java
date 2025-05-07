@@ -17,13 +17,6 @@ import java.util.Map;
 public interface EditablePixel extends Pixel {
 
     /**
-     * Returns the color space associated with this pixel.
-     *
-     * @return the {@link ColorSpace} in which this pixel is represented.
-     */
-    ColorSpace colorSpace();
-
-    /**
      * Sets the values for all color channels in this pixel.
      * <p>
      * This method allows you to update the pixel with a map of channel values, where the key is

@@ -44,7 +44,7 @@ public interface Pixel {
      * a transformation or mapping between channel sets.
      *
      * @param colorSpace the target {@link ColorSpace}.
-     * @return a new {@code Pixel} in the specified color space.
+     * @return a new {@code Pixel} in the specified color space, or null if it could not be converted.
      */
     Pixel as(ColorSpace colorSpace);
 

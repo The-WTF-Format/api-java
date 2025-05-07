@@ -19,9 +19,6 @@ public class MaxDefaultValue implements DefaultValue {
      */
     public static final MaxDefaultValue INSTANCE = new MaxDefaultValue();
 
-    /**
-     * Private constructor to prevent external instantiation.
-     */
     private MaxDefaultValue() {
         // Prevent instantiation
     }

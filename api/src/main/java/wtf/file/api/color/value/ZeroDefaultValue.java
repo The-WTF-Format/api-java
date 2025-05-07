@@ -19,9 +19,6 @@ public class ZeroDefaultValue implements DefaultValue {
      */
     public static final ZeroDefaultValue INSTANCE = new ZeroDefaultValue();
 
-    /**
-     * Private constructor to prevent external instantiation.
-     */
     private ZeroDefaultValue() {
         // Prevent instantiation
     }
