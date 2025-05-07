@@ -12,7 +12,7 @@ import wtf.file.api.v1.impl.editable.EditableWtfImageImpl;
 import wtf.file.api.v1.impl.editable.metadata.EditableMetadataContainerImpl;
 import wtf.file.api.version.Version;
 
-public class WtfEncoder {
+public class V1Encoder {
 
     @NotNull
     public static byte[] encode(EditableWtfImageImpl image) {
