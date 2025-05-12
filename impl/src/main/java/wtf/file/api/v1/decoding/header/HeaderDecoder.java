@@ -23,27 +23,19 @@ public class HeaderDecoder {
         byte[] header = Arrays.copyOfRange(bytes, 0, 8);
         byte[] remaining = Arrays.copyOfRange(bytes, 8, bytes.length);
 
-        byte[] heightBytes = Arrays.copyOfRange(header, 0, 2);
-        int height = (heightBytes[0] & 0xFF) << 8 | heightBytes[1] & 0xFF;
+        int height = getHeight(header);
+        int width = getWidth(header);
 
-        byte[] widthBytes = Arrays.copyOfRange(header, 2, 4);
-        int width = (widthBytes[0] & 0xFF) << 8 | widthBytes[1] & 0xFF;
+        ColorSpace colorSpace = getColorSpace(header);
+        int channelWidth = getChannelWidth(header);
 
-        byte colorSpaceByte = header[4];
-        ColorSpace colorSpace = ColorSpaceUtil.colorSpaceMap().get(colorSpaceByte);
-        if (colorSpace == null) {
-            throw new WtfException(String.format("Unknown color space %d", colorSpaceByte));
-        }
-
-        byte channelWidthByte = header[5];
-        int channelWidth = channelWidthByte & 0xFF;
-
-        byte framesByte = header[6];
-        int frames = framesByte & 0xFF;
+        int frames = getFrames(header);
 
         byte timingByte = header[7];
-        HeaderInformation.FrameCoding timing = HeaderInformation.FrameCoding.fromTFlag((timingByte & 0x80) != 0);
-        int timingValue = timingByte & 0x7F;
+        HeaderInformation.FrameCoding timing = getFrameCoding(timingByte);
+        int timingValue = getTimingValue(timingByte);
+
+        ensureCorrectAnimation(frames, timing, timingValue);
 
         return new Pair<>(
                 new HeaderInformation(
@@ -54,5 +46,69 @@ public class HeaderDecoder {
                 remaining
         );
     }
+
+    private static int getHeight(byte[] header) {
+        byte[] heightBytes = Arrays.copyOfRange(header, 0, 2);
+        return (heightBytes[0] & 0xFF) << 8 | heightBytes[1] & 0xFF;
+    }
+
+    private static int getWidth(byte[] header) {
+        byte[] widthBytes = Arrays.copyOfRange(header, 2, 4);
+        return (widthBytes[0] & 0xFF) << 8 | widthBytes[1] & 0xFF;
+    }
+
+    @NotNull
+    private static ColorSpace getColorSpace(byte[] header) throws WtfException {
+        byte colorSpaceByte = header[4];
+        ColorSpace colorSpace = ColorSpaceUtil.colorSpaceMap().get(colorSpaceByte);
+        if (colorSpace == null) {
+            throw new WtfException(String.format("Unknown color space %X", colorSpaceByte));
+        }
+
+        return colorSpace;
+    }
+
+    private static int getChannelWidth(byte[] header) throws WtfException {
+        byte channelWidthByte = header[5];
+        int channelWidth = channelWidthByte & 0xFF;
+        if (channelWidth > 8) {
+            throw new WtfException(String.format("Channel width %d is greater than 8", channelWidth));
+        }
+        return channelWidth;
+    }
+
+    private static int getFrames(byte[] header) throws WtfException {
+        byte framesByte = header[6];
+        int frames = framesByte & 0xFF;
+        if (frames == 0) {
+            throw new WtfException("Frames (0) must be at least 1");
+        }
+        return frames;
+    }
+
+    private static HeaderInformation.FrameCoding getFrameCoding(byte timingByte) {
+        return HeaderInformation.FrameCoding.fromTFlag((timingByte & 0x80) != 0);
+    }
+
+    private static int getTimingValue(byte timingByte) {
+        return timingByte & 0x7F;
+    }
+
+    private static void ensureCorrectAnimation(int frames, HeaderInformation.FrameCoding frameCoding, int timingValue) throws WtfException {
+        if (frames == 1) {
+            if (frameCoding != HeaderInformation.FrameCoding.FPS_CODED) {
+                throw new WtfException("If frames is 1, t must be 0 but was 1");
+            }
+
+            if (timingValue != 0) {
+                throw new WtfException(String.format("If frames is 1, frame timing must be 0, got %d", timingValue));
+            }
+        } else {
+            if (timingValue == 0) {
+                throw new WtfException("If frames is 1, fps or spf must not be 0");
+            }
+        }
+    }
+
 
 }

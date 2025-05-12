@@ -3,6 +3,7 @@ package wtf.file.api.v1.encoding;
 import org.jetbrains.annotations.NotNull;
 import wtf.file.api.encoding.VersionEncoder;
 import wtf.file.api.exception.NotYetImplementedException;
+import wtf.file.api.exception.WtfException;
 import wtf.file.api.v1.decoding.data.ImageData;
 import wtf.file.api.v1.encoding.clut.ClutEncoder;
 import wtf.file.api.v1.encoding.data.ImageDataEncoder;
@@ -14,8 +15,7 @@ import wtf.file.api.version.Version;
 
 public class V1Encoder {
 
-    @NotNull
-    public static byte[] encode(EditableWtfImageImpl image) {
+    public static byte[] encode(EditableWtfImageImpl image) throws WtfException {
         byte[] versionBytes = VersionEncoder.encode(Version.VERSION_1);
 
         ImageData imageData = ImageDataEncoder.asImageData(image);

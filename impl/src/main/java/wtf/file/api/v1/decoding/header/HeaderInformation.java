@@ -25,7 +25,7 @@ public record HeaderInformation(
         }
 
         public static FrameCoding fromTFlag(boolean tFlag) {
-            return tFlag ? FPS_CODED : SPF_CODED;
+            return tFlag ? SPF_CODED : FPS_CODED;
         }
 
     }
