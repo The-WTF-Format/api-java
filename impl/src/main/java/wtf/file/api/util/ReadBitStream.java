@@ -1,6 +1,7 @@
 package wtf.file.api.util;
 
 import org.apache.commons.lang3.ArrayUtils;
+import wtf.file.api.exception.WtfException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -16,9 +17,9 @@ public class ReadBitStream {
         this.bytes = bytes;
     }
 
-    public byte[] readBits(int bits) {
+    public byte[] readBits(int bits) throws WtfException {
         if (bits > getRemainingBits()) {
-            throw new IllegalStateException(String.format("Bit stream has only %d bits reaming, tried to read %d bits", getRemainingBits(), bits));
+            throw new WtfException(String.format("Bit stream has only %d bits reaming, tried to read %d bits", getRemainingBits(), bits));
         }
 
         List<Byte> resultBytes = new ArrayList<>(bits / 8 + (bits % 8 == 0 ? 0 : 1)); // Initialize the list with an estimated size
@@ -76,9 +77,21 @@ public class ReadBitStream {
         return ArrayUtils.toPrimitive(resultBytes.toArray(new Byte[0]));
     }
 
-    public byte[] peekBits(int bits) {
+    public byte[] readBytes(int bytes) throws WtfException {
+        return readBits(bytes * 8);
+    }
+
+    public byte readByte() throws WtfException {
+        return readBytes(1)[0];
+    }
+
+    public boolean readFlag() throws WtfException {
+        return readBits(1)[0] != 0;
+    }
+
+    public byte[] peekBits(int bits) throws WtfException {
         if (bits > getRemainingBits()) {
-            throw new IllegalStateException(String.format("Bit stream has only %d bits reaming, tried to read %d bits", getRemainingBits(), bits));
+            throw new WtfException(String.format("Bit stream has only %d bits reaming, tried to read %d bits", getRemainingBits(), bits));
         }
 
         int byteIndex = this.byteIndex;
@@ -139,15 +152,11 @@ public class ReadBitStream {
         return ArrayUtils.toPrimitive(resultBytes.toArray(new Byte[0]));
     }
 
-    public byte[] readBytes(int bytes) {
-        return readBits(bytes * 8);
-    }
-
-    public byte[] peekBytes(int bytes) {
+    public byte[] peekBytes(int bytes) throws WtfException {
         return peekBits(bytes * 8);
     }
 
-    public String readAscii() {
+    public String readAscii() throws WtfException {
         StringBuilder builder = new StringBuilder();
         char read;
         while ((read = (char) readBits(7)[0]) != 0) {
@@ -157,7 +166,7 @@ public class ReadBitStream {
         return builder.toString();
     }
 
-    public String readUtf8() {
+    public String readUtf8() throws WtfException {
         byte read;
         List<Byte> bytes = new ArrayList<>();
         while ((read = readBits(1)[0]) != 0) {
@@ -185,7 +194,7 @@ public class ReadBitStream {
         return (long) (bytes.length - byteIndex) * 8 - bitIndex;
     }
 
-    public long readNumber(int bits) {
+    public long readNumber(int bits) throws WtfException {
         if (bits > 63 || bits < 1) {
             throw new IllegalArgumentException("Can only read numbers between 1 and 63 bits long, got " + bits + "");
         }

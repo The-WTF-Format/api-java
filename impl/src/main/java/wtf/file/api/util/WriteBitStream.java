@@ -1,11 +1,9 @@
 package wtf.file.api.util;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
+import wtf.file.api.exception.WtfException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public class WriteBitStream {
@@ -110,9 +108,13 @@ public class WriteBitStream {
         writeZero(8 - currentBitIndex);
     }
 
-    public void writeNumber(long number, int bits) {
+    public void writeNumber(long number, int bits) throws WtfException {
         if (bits > 63 || bits < 1) {
             throw new IllegalArgumentException("Can only write numbers between 1 and 63 bits long, got " + bits + "");
+        }
+
+        if (number > Math.pow(2, bits) - 1) {
+            throw new WtfException(String.format("%d should be encoded in field with size %d", number, bits));
         }
 
         int numBytes = (bits + 7) / 8;  // This ensures we round up when bits are not an exact multiple of 8
