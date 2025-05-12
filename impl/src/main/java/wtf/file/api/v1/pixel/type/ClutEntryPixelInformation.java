@@ -1,21 +1,33 @@
 package wtf.file.api.v1.pixel.type;
 
+import wtf.file.api.color.ColorSpace;
+import wtf.file.api.color.channel.ColorChannel;
 import wtf.file.api.data.Pixel;
 import wtf.file.api.v1.decoding.clut.ClutInformation;
+import wtf.file.api.v1.impl.data.PixelImpl;
 import wtf.file.api.v1.pixel.PixelInformation;
 import wtf.file.api.v1.pixel.PixelType;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class ClutEntryPixelInformation extends PixelInformation {
 
-    private final long clutCode;
+    private final int clutCode;
 
     public ClutEntryPixelInformation(int frame, int x, int y, long clutCode) {
         super(frame, x, y, PixelType.CLUT_ENTRY);
-        this.clutCode = clutCode;
+        this.clutCode = Math.toIntExact(clutCode);
     }
 
     @Override
-    public Pixel pixel(ClutInformation clutInformation, PixelInformation[][][] pixelInformation) {
-        return null;
+    public Map<ColorChannel, Short> pixel(ClutInformation clutInformation, PixelInformation[][][] pixelInformation, ArrayList<PixelInformation> visited) {
+        Map<ColorChannel, Integer> clutEntry = clutInformation.clut().get(this.clutCode);
+        Map<ColorChannel, Short> pixelData = new HashMap<>();
+
+        clutEntry.forEach((channel, value) -> pixelData.put(channel, value.shortValue()));
+
+        return pixelData;
     }
 }

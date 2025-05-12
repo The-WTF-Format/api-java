@@ -1,7 +1,12 @@
 package wtf.file.api.v1.pixel;
 
+import wtf.file.api.color.channel.ColorChannel;
 import wtf.file.api.data.Pixel;
+import wtf.file.api.exception.WtfException;
 import wtf.file.api.v1.decoding.clut.ClutInformation;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public abstract class PixelInformation {
 
@@ -17,6 +22,10 @@ public abstract class PixelInformation {
         this.type = type;
     }
 
-    public abstract Pixel pixel(ClutInformation clutInformation, PixelInformation[][][] pixelInformation);
+    public Map<ColorChannel, Short> pixel(ClutInformation clutInformation, PixelInformation[][][] pixelInformation) throws WtfException {
+        return pixel(clutInformation, pixelInformation, new ArrayList<>());
+    }
+
+    public abstract Map<ColorChannel, Short> pixel(ClutInformation clutInformation, PixelInformation[][][] pixelInformation, ArrayList<PixelInformation> visited) throws WtfException;
 
 }

@@ -49,10 +49,7 @@ public class ImageDataDecoder {
                                         }
                                     }
 
-                                    yield new DirectPixelInformation(
-                                            frame, x, y, headerInformation.colorSpace(),
-                                            channelValues
-                                    );
+                                    yield new DirectPixelInformation(frame, x, y, channelValues);
                                 }
                                 case COPY_BY_LOCATION -> {
                                     if (!bitStream.hasRemaining(bitSize.xReference() + bitSize.yReference())) {
@@ -92,11 +89,11 @@ public class ImageDataDecoder {
                                 }
                                 case COPY_PREVIOUS_LOCATION -> new ReferencePixelInformation(
                                         frame, x, y, PixelType.COPY_PREVIOUS_LOCATION,
-                                        0, -1, -1
+                                        -2, -1, -1
                                 );
                                 case COPY_PREVIOUS_FRAME -> new ReferencePixelInformation(
                                         frame, x, y, PixelType.COPY_PREVIOUS_FRAME,
-                                        -1, 0, 0
+                                        -1, -2, -2
                                 );
                                 case CLUT_ENTRY -> {
                                     if (!bitStream.hasRemaining(bitSize.clutCode())) {

@@ -24,7 +24,7 @@ public class ReadBitStream {
             int bits,
             Supplier<Integer> byteIndexSupplier, Supplier<Integer> bitIndexSupplier,
             Consumer<Integer> byteIndexSetter, Consumer<Integer> bitIndexSetter
-    ) {
+    ) throws WtfException {
         if (bits > getRemainingBits()) {
             throw new WtfException(String.format("Bit stream has only %d bits reaming, tried to read %d bits", getRemainingBits(), bits));
         }
