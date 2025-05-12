@@ -21,4 +21,15 @@ public enum PixelType {
     public byte flag() {
         return flag;
     }
+
+    public static PixelType fromFlag(byte flag) {
+        for (PixelType pixelType : values()) {
+            if (pixelType.flag() == flag) {
+                return pixelType;
+            }
+        }
+
+        return null;
+    }
+
 }
