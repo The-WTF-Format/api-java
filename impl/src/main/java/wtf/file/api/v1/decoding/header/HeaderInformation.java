@@ -4,7 +4,7 @@ import wtf.file.api.color.ColorSpace;
 
 public record HeaderInformation(
         int height, int width,
-        ColorSpace colorSpace, byte channelWidth,
+        ColorSpace colorSpace, int channelWidth,
         int frames,
         FrameCoding frameTiming, int frameTimingValue
 ) {
@@ -22,6 +22,10 @@ public record HeaderInformation(
 
         public byte flag() {
             return flag;
+        }
+
+        public static FrameCoding fromTFlag(boolean tFlag) {
+            return tFlag ? SPF_CODED : FPS_CODED;
         }
 
     }

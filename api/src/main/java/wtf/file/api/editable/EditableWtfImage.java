@@ -72,14 +72,14 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
      * Sets the channel width of the editable image.
      * The channel width specifies the bit depth per channel, determining the amount
      * of information stored per individual color channel (e.g., red, green, blue) or alpha channel.
-     * The value must be within valid bounds for the channel width (1 - 255).
+     * The value must be within valid bounds for the channel width (1 - 8).
      * <p>
      * The api tries to represent the color as best as possible in the new channel width.
      *
-     * @param channelWidth the bit depth of each channel, in the range from 1 to 255
+     * @param channelWidth the bit depth of each channel, in the range from 1 to 8
      * @throws NumberOutOfBoundsException if the specified channel width is outside the allowed range
      */
-    void setChannelWidth(short channelWidth) throws NumberOutOfBoundsException;
+    void setChannelWidth(int channelWidth) throws NumberOutOfBoundsException;
 
     @Override
     EditableAnimationInformation animationInformation();
