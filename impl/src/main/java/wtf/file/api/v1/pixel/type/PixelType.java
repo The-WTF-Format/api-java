@@ -1,4 +1,4 @@
-package wtf.file.api.v1.pixel;
+package wtf.file.api.v1.pixel.type;
 
 public enum PixelType {
 
@@ -21,4 +21,15 @@ public enum PixelType {
     public byte flag() {
         return flag;
     }
+
+    public static PixelType fromFlag(byte flag) {
+        for (PixelType pixelType : values()) {
+            if (pixelType.flag() == flag) {
+                return pixelType;
+            }
+        }
+
+        return null;
+    }
+
 }
