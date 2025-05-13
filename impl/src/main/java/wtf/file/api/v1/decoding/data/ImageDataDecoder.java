@@ -50,13 +50,13 @@ public class ImageDataDecoder {
                                         throw new WtfException(String.format("Pixel at [%d;%d;%d] is direct entry but has not enough data for every channel", frame, y, x));
                                     }
 
-                                    Map<ColorChannel, Long> channelValues = new HashMap<>();
+                                    Map<ColorChannel, Short> channelValues = new HashMap<>();
                                     for (ColorChannel channel : headerInformation.colorSpace().channels()) {
                                         switch (channel.type()) {
                                             case FIXED ->
-                                                    channelValues.put(channel, bitStream.readNumber(((FixedColorChannel) channel).bits()));
+                                                    channelValues.put(channel, (short) bitStream.readNumber(((FixedColorChannel) channel).bits()));
                                             case DYNAMIC ->
-                                                    channelValues.put(channel, bitStream.readNumber(headerInformation.channelWidth()));
+                                                    channelValues.put(channel, (short) bitStream.readNumber(headerInformation.channelWidth()));
                                         }
                                     }
 
@@ -119,7 +119,7 @@ public class ImageDataDecoder {
             }
         }
 
-        return new ImageData(pixels);
+        return new ImageData(pixels, null);
     }
 
 }

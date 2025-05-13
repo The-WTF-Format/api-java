@@ -10,14 +10,24 @@ import java.util.Map;
 public class ClutEntryPixelInformation extends PixelInformation {
 
     private final int clutCode;
+    private final long code;
 
-    public ClutEntryPixelInformation(int frame, int x, int y, long clutCode) {
+    public ClutEntryPixelInformation(int frame, int x, int y, long clutCode, long code) {
         super(frame, x, y, PixelType.CLUT_ENTRY);
         this.clutCode = Math.toIntExact(clutCode);
+        this.code = code;
+    }
+
+    public ClutEntryPixelInformation(int frame, int x, int y, long clutCode) {
+        this(frame, x, y, clutCode, 0);
     }
 
     public int clutCode() {
         return this.clutCode;
+    }
+
+    public long code() {
+        return this.code;
     }
 
     @Override

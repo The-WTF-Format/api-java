@@ -1,5 +1,6 @@
 package wtf.file.api.v1.encoding;
 
+import wtf.file.api.editable.compression.DataCompressionType;
 import wtf.file.api.encoding.VersionEncoder;
 import wtf.file.api.exception.WtfException;
 import wtf.file.api.util.WriteBitStream;
@@ -15,12 +16,12 @@ import wtf.file.api.version.Version;
 
 public class V1Encoder {
 
-    public static byte[] encode(EditableWtfImageImpl image) throws WtfException {
+    public static byte[] encode(EditableWtfImageImpl image, DataCompressionType compressionType) throws WtfException {
         WriteBitStream bitStream = new WriteBitStream();
 
         VersionEncoder.encode(Version.VERSION_1, bitStream);
 
-        ImageData imageData = ImageDataEncoder.asImageData(image);
+        ImageData imageData = ImageDataEncoder.asImageData(image, compressionType);
         HeaderEncoder.encode(image, bitStream);
         int length = ClutEncoder.encode(imageData, bitStream);
         MetadataEncoder.encode((EditableMetadataContainerImpl) image.metadataContainer(), bitStream);

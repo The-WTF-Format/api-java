@@ -166,7 +166,7 @@ public class ReadBitStream {
     }
 
     public long readNumber(int bits) throws WtfException {
-        if (bits > 63 || bits < 1) {
+        if (bits > 64 || bits < 1) {
             throw new IllegalArgumentException("Can only read numbers between 1 and 63 bits long, got " + bits + "");
         }
 

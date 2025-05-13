@@ -19,8 +19,8 @@ public record BitSize(
                 getBitSize(colorSpace, channelWidth),
                 clutCode,
                 getBitSize(maxFrames),
-                getBitSize(height),
-                getBitSize(width)
+                getBitSize(width),
+                getBitSize(height)
         );
     }
 
