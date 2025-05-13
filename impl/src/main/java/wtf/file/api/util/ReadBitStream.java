@@ -93,6 +93,13 @@ public class ReadBitStream {
         );
     }
 
+    public byte readBit(int bits) throws WtfException {
+        if (bits > 8) {
+            throw new IllegalArgumentException("Can only read at maximum 8 bit at a time into a single byte, got " + bits + " bits");
+        }
+        return readBits(bits)[0];
+    }
+
     public byte[] readBytes(int bytes) throws WtfException {
         return readBits(bytes * 8);
     }

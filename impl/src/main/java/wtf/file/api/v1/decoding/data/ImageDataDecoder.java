@@ -3,13 +3,14 @@ package wtf.file.api.v1.decoding.data;
 import org.jetbrains.annotations.NotNull;
 import wtf.file.api.color.channel.ColorChannel;
 import wtf.file.api.color.channel.FixedColorChannel;
-import wtf.file.api.exception.NotYetImplementedException;
 import wtf.file.api.exception.WtfException;
 import wtf.file.api.util.ReadBitStream;
 import wtf.file.api.v1.decoding.clut.ClutInformation;
 import wtf.file.api.v1.decoding.header.HeaderInformation;
-import wtf.file.api.v1.pixel.PixelInformation;
-import wtf.file.api.v1.pixel.PixelType;
+import wtf.file.api.v1.pixel.BitSize;
+import wtf.file.api.v1.pixel.ImageData;
+import wtf.file.api.v1.pixel.type.PixelInformation;
+import wtf.file.api.v1.pixel.type.PixelType;
 import wtf.file.api.v1.pixel.type.ClutEntryPixelInformation;
 import wtf.file.api.v1.pixel.type.DirectPixelInformation;
 import wtf.file.api.v1.pixel.type.ReferencePixelInformation;
@@ -21,7 +22,11 @@ public class ImageDataDecoder {
 
     @NotNull
     public static ImageData decode(HeaderInformation headerInformation, ClutInformation clutInformation, ReadBitStream bitStream) throws WtfException {
-        BitSize bitSize = getBitSize(headerInformation, clutInformation);
+        BitSize bitSize = BitSize.of(
+            headerInformation.channelWidth(), headerInformation.colorSpace(),
+            clutInformation.codeLength(),
+            headerInformation.frames(), headerInformation.height(), headerInformation.width()
+        );
         PixelInformation[][][] pixels = new PixelInformation[headerInformation.frames()][headerInformation.height()][headerInformation.width()];
 
         for (int frame = 0; frame < headerInformation.frames(); frame++) {
@@ -31,7 +36,13 @@ public class ImageDataDecoder {
                         throw new WtfException(String.format("Missing pixel [%d;%d;%d]", frame, y, x));
                     }
 
-                    PixelType pixelType = PixelType.fromFlag(bitStream.readBits(3)[0]);
+                    byte typeFlag = bitStream.readBit(3);
+
+                    PixelType pixelType = PixelType.fromFlag(typeFlag);
+                    if (pixelType == null) {
+                        throw new WtfException(String.format("Unknown pixel type %X at [%d;%d;%d]", typeFlag, frame, y, x));
+                    }
+
                     pixels[frame][y][x] =
                             switch (pixelType) {
                                 case DIRECT_ENTRY -> {
@@ -109,26 +120,6 @@ public class ImageDataDecoder {
         }
 
         return new ImageData(pixels);
-    }
-
-    private static BitSize getBitSize(HeaderInformation headerInformation, ClutInformation clutInformation) {
-        int colorEntry = 0;
-        for (ColorChannel channel : headerInformation.colorSpace().channels()) {
-            switch (channel.type()) {
-                case DYNAMIC -> colorEntry += headerInformation.channelWidth();
-                case FIXED -> colorEntry += ((FixedColorChannel) channel).bits();
-            }
-        }
-
-        return new BitSize(
-                colorEntry, clutInformation.codeLength(),
-                getBitSize(headerInformation.frames()),
-                getBitSize(headerInformation.height()), getBitSize(headerInformation.width())
-        );
-    }
-
-    private static int getBitSize(int maxValue) {
-        return 1 + (int) Math.floor(Math.log(maxValue) / Math.log(2));
     }
 
 }

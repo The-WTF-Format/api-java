@@ -1,4 +1,4 @@
-package wtf.file.api.v1.pixel;
+package wtf.file.api.v1.pixel.type;
 
 public enum PixelType {
 

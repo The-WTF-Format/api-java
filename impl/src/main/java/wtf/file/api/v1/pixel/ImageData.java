@@ -1,11 +1,11 @@
-package wtf.file.api.v1.decoding.data;
+package wtf.file.api.v1.pixel;
 
 import wtf.file.api.color.ColorSpace;
 import wtf.file.api.data.Pixel;
 import wtf.file.api.exception.WtfException;
 import wtf.file.api.v1.decoding.clut.ClutInformation;
 import wtf.file.api.v1.impl.data.PixelImpl;
-import wtf.file.api.v1.pixel.PixelInformation;
+import wtf.file.api.v1.pixel.type.PixelInformation;
 
 public record ImageData(PixelInformation[][][] pixels) {
 

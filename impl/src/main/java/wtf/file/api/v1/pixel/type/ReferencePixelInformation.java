@@ -1,12 +1,9 @@
 package wtf.file.api.v1.pixel.type;
 
 import wtf.file.api.color.channel.ColorChannel;
-import wtf.file.api.data.Pixel;
 import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.exception.WtfException;
 import wtf.file.api.v1.decoding.clut.ClutInformation;
-import wtf.file.api.v1.pixel.PixelInformation;
-import wtf.file.api.v1.pixel.PixelType;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -32,6 +29,18 @@ public class ReferencePixelInformation extends PixelInformation {
             this.xReference = xReference;
             this.yReference = yReference;
         }
+    }
+
+    public int frameReference() {
+        return frameReference;
+    }
+
+    public int xReference() {
+        return xReference;
+    }
+
+    public int yReference() {
+        return yReference;
     }
 
     private int getFrameReference(int frame, int x, int y, int frameReference) throws WtfException {
