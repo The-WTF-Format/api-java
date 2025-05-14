@@ -34,8 +34,8 @@ public class MaxDefaultValue implements DefaultValue {
      * @return the maximum value representable with the given number of bits
      */
     @Override
-    public Long forChannelWidth(short channelWidth) {
-        return (1L << channelWidth) - 1;
+    public short forChannelWidth(int channelWidth) {
+        return (short) ((1 << channelWidth) - 1);
     }
 
 }
