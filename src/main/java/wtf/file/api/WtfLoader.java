@@ -1,10 +1,12 @@
 package wtf.file.api;
 
 import wtf.file.api.builder.WtfImageBuilder;
-import wtf.file.api.exception.NotYetImplementedException;
+import wtf.file.api.decoding.WtfDecoder;
 import wtf.file.api.exception.WtfException;
+import wtf.file.api.impl.WtfImageBuilderImpl;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -19,12 +21,13 @@ public class WtfLoader {
      * @param path the path to load the WtfImage from
      * @return the loaded WtfImage instance
      * @throws WtfException if there is an issue specific to WtfImage loading.
-     *                      e.g., an unknown version or to few or many bytes
+     *                      e.g., an unknown version or too few or many bytes
      * @throws IOException if an I/O error occurs during the loading process
      * @see WtfImage
      */
     public WtfImage from(Path path) throws WtfException, IOException {
-        throw new NotYetImplementedException("Loading from path");
+        byte[] bytes = Files.readAllBytes(path);
+        return WtfDecoder.decode(bytes);
     }
 
     /**
@@ -34,7 +37,7 @@ public class WtfLoader {
      * @see WtfImageBuilder
      */
     public WtfImageBuilder by() {
-        return new WtfImageBuilder();
+        return new WtfImageBuilderImpl();
     }
 
 }
