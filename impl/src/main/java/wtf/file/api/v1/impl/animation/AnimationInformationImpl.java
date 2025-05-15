@@ -3,8 +3,6 @@ package wtf.file.api.v1.impl.animation;
 import wtf.file.api.animation.AnimationInformation;
 import wtf.file.api.data.Frame;
 import wtf.file.api.data.Pixel;
-import wtf.file.api.exception.NotYetImplementedException;
-import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.util.NumberUtil;
 import wtf.file.api.v1.decoding.header.HeaderInformation;
 import wtf.file.api.v1.impl.data.FrameImpl;

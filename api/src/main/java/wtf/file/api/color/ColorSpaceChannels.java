@@ -1,6 +1,5 @@
 package wtf.file.api.color;
 
-import wtf.file.api.color.channel.ColorChannel;
 import wtf.file.api.color.channel.DynamicColorChannel;
 import wtf.file.api.color.channel.FixedColorChannel;
 

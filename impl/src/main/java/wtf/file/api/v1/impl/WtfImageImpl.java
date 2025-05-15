@@ -3,18 +3,15 @@ package wtf.file.api.v1.impl;
 import wtf.file.api.WtfImage;
 import wtf.file.api.animation.AnimationInformation;
 import wtf.file.api.color.ColorSpace;
-import wtf.file.api.color.channel.ColorChannel;
 import wtf.file.api.data.Pixel;
 import wtf.file.api.editable.EditableWtfImage;
 import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.metadata.MetadataContainer;
 import wtf.file.api.v1.decoding.header.HeaderInformation;
 import wtf.file.api.v1.impl.animation.AnimationInformationImpl;
-import wtf.file.api.v1.pixel.ImageData;
 import wtf.file.api.version.Version;
 
 import java.awt.*;
-import java.util.Map;
 
 public class WtfImageImpl implements WtfImage {
 

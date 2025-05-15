@@ -30,6 +30,7 @@ public class WriteBitStream {
             }
 
             int remainingBitsInByte = 8 - bitIndex;
+            //noinspection DuplicatedCode
             int remainingBitsForByte = 8 - currentBitIndex;
 
             int bitsToExtract = Math.min(Math.min(bitsRemaining, remainingBitsInByte), remainingBitsForByte);
@@ -110,7 +111,7 @@ public class WriteBitStream {
 
     public void writeNumber(long number, int bits) throws WtfException {
         if (bits > 63 || bits < 1) {
-            throw new IllegalArgumentException("Can only write numbers between 1 and 63 bits long, got " + bits + "");
+            throw new IllegalArgumentException("Can only write numbers between 1 and 63 bits long, got " + bits);
         }
 
         if (number > Math.pow(2, bits) - 1) {

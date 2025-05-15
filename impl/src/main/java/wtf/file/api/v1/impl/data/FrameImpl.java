@@ -8,18 +8,7 @@ import wtf.file.api.util.NumberUtil;
 
 import java.awt.*;
 
-public class FrameImpl implements Frame {
-
-    private final Pixel[][] pixels;
-
-    public FrameImpl(Pixel[][] pixels) {
-        this.pixels = pixels;
-    }
-
-    @Override
-    public Pixel[][] pixels() {
-        return pixels;
-    }
+public record FrameImpl(Pixel[][] pixels) implements Frame {
 
     @Override
     public Pixel at(int x, int y) throws NumberOutOfBoundsException {

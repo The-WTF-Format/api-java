@@ -1,7 +1,6 @@
 package wtf.file.api.v1.pixel.type;
 
 import wtf.file.api.color.channel.ColorChannel;
-import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.exception.WtfException;
 import wtf.file.api.util.NumberUtil;
 import wtf.file.api.v1.decoding.clut.ClutInformation;

@@ -1,6 +1,5 @@
 package wtf.file.api.v1.impl.data.transformation;
 
-import wtf.file.api.color.ColorSpaceChannels;
 import wtf.file.api.color.channel.ColorChannel;
 
 import java.util.Map;

@@ -40,9 +40,7 @@ public class ImageDataEncoder {
             AtomicInteger clutIndex = new AtomicInteger(1);
             colorOccurrences.entrySet().stream()
                 .filter((entry) -> entry.getValue() > 5)
-                .forEach((entry) -> {
-                    clutCodes.put(entry.getKey(), clutIndex.getAndIncrement());
-                });
+                .forEach((entry) -> clutCodes.put(entry.getKey(), clutIndex.getAndIncrement()));
 
             for (int frame = 0; frame < image.animationInformation().frames(); frame++) {
                 for (int y = 0; y < image.height(); y++) {
@@ -86,6 +84,7 @@ public class ImageDataEncoder {
                         BestReferenceType bestEntry = BestReferenceType.NOT_SET;
 
                         for (int[] reference : sameReferences) {
+                            //noinspection DuplicatedCode
                             boolean previousFrame = reference[0] == frame - 1 && reference[1] == x && reference[2] == y;
                             boolean previousLocation = reference[0] == frame && reference[1] == previousX && reference[2] == previousY;
                             boolean sameFrame = reference[0] == frame;
@@ -93,7 +92,6 @@ public class ImageDataEncoder {
 
                             if (previousFrame != previousLocation) {
                                 bestReference = reference;
-                                bestEntry = BestReferenceType.PREVIOUS;
                                 break;
                             }
 
@@ -116,6 +114,7 @@ public class ImageDataEncoder {
                         }
 
                         if (bestReference != null) {
+                            //noinspection DuplicatedCode
                             boolean previousFrame = bestReference[0] == frame - 1 && bestReference[1] == x && bestReference[2] == y;
                             boolean previousLocation = bestReference[0] == frame && bestReference[1] == previousX && bestReference[2] == previousY;
                             boolean sameFrame = bestReference[0] == frame;
@@ -191,7 +190,7 @@ public class ImageDataEncoder {
         FULL,
         FRAME_SAME,
         LOCATION_SAME,
-        PREVIOUS;
+        PREVIOUS
     }
 
 }

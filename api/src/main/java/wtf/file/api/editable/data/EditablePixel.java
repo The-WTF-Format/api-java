@@ -1,6 +1,5 @@
 package wtf.file.api.editable.data;
 
-import wtf.file.api.color.ColorSpace;
 import wtf.file.api.color.channel.ColorChannel;
 import wtf.file.api.data.Pixel;
 import wtf.file.api.exception.NumberOutOfBoundsException;
@@ -23,7 +22,7 @@ public interface EditablePixel extends Pixel {
      * the {@link ColorChannel} and the value is the corresponding pixel value.
      * </p>
      *
-     * @param values a map of color channels to their corresponding pixel values.
+     * @param values a map of color channels with their corresponding pixel values.
      * @throws NumberOutOfBoundsException if any of the values exceed the allowed range for that channel.
      */
     void setValues(Map<ColorChannel, Short> values) throws NumberOutOfBoundsException;

@@ -41,7 +41,7 @@ public interface WtfImageBuilder {
      *
      * @param width the width of the image in pixels
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided height value is out of the acceptable range (1 - 65 535)
+     * @throws NumberOutOfBoundsException if the provided height value is out of the acceptable range (1-65 535)
      */
     @Contract(value = "_ -> this", mutates = "this")
     WtfImageBuilder width(int width) throws NumberOutOfBoundsException;
@@ -52,7 +52,7 @@ public interface WtfImageBuilder {
      *
      * @param height the height of the image in pixels
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided height value is out of the acceptable range (1 - 65 535)
+     * @throws NumberOutOfBoundsException if the provided height value is out of the acceptable range (1-65 535)
      */
     @Contract(value = "_ -> this", mutates = "this")
     WtfImageBuilder height(int height) throws NumberOutOfBoundsException;
@@ -76,7 +76,7 @@ public interface WtfImageBuilder {
      *
      * @param channelWidth the width of the channel in bits
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided channelWidth value is out of the acceptable range (1 - 255)
+     * @throws NumberOutOfBoundsException if the provided channelWidth value is out of the acceptable range (1-255)
      */
     @Contract(value = "_ -> this", mutates = "this")
     WtfImageBuilder channelWidth(short channelWidth) throws NumberOutOfBoundsException;
@@ -88,7 +88,7 @@ public interface WtfImageBuilder {
      *
      * @param frames the number of frames
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided frames value is out of the acceptable range (1 - 255)
+     * @throws NumberOutOfBoundsException if the provided frames value is out of the acceptable range (1-255)
      */
     @Contract(value = "_ -> this", mutates = "this")
     WtfImageBuilder frames(int frames) throws NumberOutOfBoundsException;
@@ -99,7 +99,7 @@ public interface WtfImageBuilder {
      *
      * @param fps the frames per second value
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided fps value is out of the acceptable range (1 - 127)
+     * @throws NumberOutOfBoundsException if the provided fps value is out of the acceptable range (1-127)
      */
     @Contract(value = "_ -> this", mutates = "this")
     WtfImageBuilder framesPerSecond(int fps) throws NumberOutOfBoundsException;
@@ -110,7 +110,7 @@ public interface WtfImageBuilder {
      *
      * @param spf the seconds per frame, representing the duration of each frame in seconds
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided seconds per frame value is out of the acceptable range (1 - 127)
+     * @throws NumberOutOfBoundsException if the provided seconds per-frame value is out of the acceptable range (1-127)
      */
     @Contract(value = "_ -> this", mutates = "this")
     WtfImageBuilder secondsPerFrame(int spf) throws NumberOutOfBoundsException;

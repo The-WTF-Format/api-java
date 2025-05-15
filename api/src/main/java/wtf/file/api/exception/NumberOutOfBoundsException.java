@@ -1,7 +1,7 @@
 package wtf.file.api.exception;
 
 /**
- * Thrown to indicate that a numeric value is outside of the expected bounds.
+ * Thrown to indicate that a numeric value is outside the expected bounds.
  * <p>
  * This exception provides access to the minimum, maximum, and actual values
  * involved in the failed validation.

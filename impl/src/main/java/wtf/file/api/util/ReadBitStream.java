@@ -41,6 +41,7 @@ public class ReadBitStream {
 
             // Calculate how many bits are left in the current byte and remaining bits in the byte
             int remainingBitsInByte = 8 - bitIndexSupplier.get();
+            //noinspection DuplicatedCode
             int remainingBitsForByte = 8 - currentBitIndex;
 
             // Determine how many bits to extract from this byte
@@ -157,6 +158,7 @@ public class ReadBitStream {
         skip(8 - bitIndex);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean hasRemaining(int bits) {
         return getRemainingBits() >= bits;
     }
@@ -167,7 +169,7 @@ public class ReadBitStream {
 
     public long readNumber(int bits) throws WtfException {
         if (bits > 64 || bits < 1) {
-            throw new IllegalArgumentException("Can only read numbers between 1 and 63 bits long, got " + bits + "");
+            throw new IllegalArgumentException("Can only read numbers between 1 and 63 bits long, got " + bits);
         }
 
         byte[] bytes = readBits(bits);
