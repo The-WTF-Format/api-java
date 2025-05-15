@@ -12,15 +12,13 @@ public class AlphaTransformer {
 
     private AlphaTransformer() {}
 
-    public short transform(short alpha, int channelWidth, ColorSpace from, ColorSpace to) {
-        ColorChannel fromChannel = getAlphaChannel(from), toChannel = getAlphaChannel(to);
-
-        if (fromChannel.equals(toChannel)) {
+    public short transform(short alpha, int channelWidth, ColorChannel from, ColorChannel to) {
+        if (from.equals(to)) {
             return alpha;
         }
 
         // from fixed to dynamic
-        if (fromChannel instanceof FixedColorChannel) {
+        if (from instanceof FixedColorChannel) {
             if (alpha >= 1) return MaxDefaultValue.INSTANCE.forChannelWidth(channelWidth);
             else return ZeroDefaultValue.INSTANCE.forChannelWidth(channelWidth);
         }

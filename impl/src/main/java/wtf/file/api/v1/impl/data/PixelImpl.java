@@ -3,11 +3,10 @@ package wtf.file.api.v1.impl.data;
 import wtf.file.api.color.ColorSpace;
 import wtf.file.api.color.ColorSpaceChannels;
 import wtf.file.api.color.channel.ColorChannel;
+import wtf.file.api.color.channel.FixedColorChannel;
 import wtf.file.api.data.Pixel;
-import wtf.file.api.exception.NotYetImplementedException;
 import wtf.file.api.v1.impl.data.transformation.*;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,6 +16,7 @@ public class PixelImpl implements Pixel {
     private final ColorSpace colorSpace;
     private final Map<ColorChannel, Short> values;
     private final int channelWidth;
+    private final HashMap<ColorSpace, Pixel> colorChannelCache = new HashMap<>();
 
     public PixelImpl(ColorSpace colorSpace, Map<ColorChannel, Short> values, int channelWidth) {
         this.colorSpace = colorSpace;
@@ -50,8 +50,18 @@ public class PixelImpl implements Pixel {
 
     @Override
     public Pixel as(ColorSpace colorSpace) {
-        Map<ColorChannel, Short> rgbValues = switch(this.colorSpace) {
-            case GRAY_SCALE, GRAY_SCALE_A, DYNAMIC_GRAY_SCALE_A -> GrayScaleTransformer.INSTANCE.toRgb(this.values(), this.channelWidth);
+        if (colorSpace == this.colorSpace()) {
+            return this;
+        }
+
+        colorChannelCache.computeIfAbsent(colorSpace, cs -> new PixelImpl(cs, this.transform(cs), this.channelWidth));
+        return colorChannelCache.get(colorSpace);
+    }
+
+    private Map<ColorChannel, Short> transform(ColorSpace colorSpace) {
+        Map<ColorChannel, Short> rgbValues = switch (this.colorSpace) {
+            case GRAY_SCALE, GRAY_SCALE_A, DYNAMIC_GRAY_SCALE_A ->
+                GrayScaleTransformer.INSTANCE.toRgb(this.values(), this.channelWidth);
             case RGB, RGBa, DYNAMIC_RGBa -> new HashMap<>(this.values());
             case CMY, CMYa, DYNAMIC_CMYa -> CMYTransformer.INSTANCE.toRgb(this.values(), this.channelWidth);
             case HSV, HSVa, DYNAMIC_HSVa -> HSVTransformer.INSTANCE.toRgb(this.values(), this.channelWidth);
@@ -64,7 +74,8 @@ public class PixelImpl implements Pixel {
         }
 
         Map<ColorChannel, Short> targetValues = new HashMap<>(switch (colorSpace) {
-            case GRAY_SCALE, GRAY_SCALE_A, DYNAMIC_GRAY_SCALE_A -> GrayScaleTransformer.INSTANCE.fromRgb(rgbValues, this.channelWidth);
+            case GRAY_SCALE, GRAY_SCALE_A, DYNAMIC_GRAY_SCALE_A ->
+                GrayScaleTransformer.INSTANCE.fromRgb(rgbValues, this.channelWidth);
             case RGB, RGBa, DYNAMIC_RGBa -> rgbValues;
             case CMY, CMYa, DYNAMIC_CMYa -> CMYTransformer.INSTANCE.fromRgb(rgbValues, this.channelWidth);
             case HSV, HSVa, DYNAMIC_HSVa -> HSVTransformer.INSTANCE.fromRgb(rgbValues, this.channelWidth);
@@ -74,13 +85,18 @@ public class PixelImpl implements Pixel {
         ColorChannel fromAlpha = AlphaTransformer.INSTANCE.getAlphaChannel(this.colorSpace);
         ColorChannel toAlpha = AlphaTransformer.INSTANCE.getAlphaChannel(colorSpace);
 
-        if (fromAlpha != null && toAlpha != null) {
-            targetValues.put(toAlpha, AlphaTransformer.INSTANCE.transform(this.values().get(fromAlpha), channelWidth, fromAlpha, toAlpha));
+        if (toAlpha == null) return targetValues;
+        if (fromAlpha == null) {
+            if (toAlpha instanceof FixedColorChannel) {
+                targetValues.put(toAlpha, (short) 1);
+            } else {
+                targetValues.put(toAlpha, (short) Math.round(Math.pow(2, channelWidth) - 1));
+            }
+            return targetValues;
         }
 
-        // TODO: Rest of alpha
-
-        throw new NotYetImplementedException();
+        targetValues.put(toAlpha, AlphaTransformer.INSTANCE.transform(this.values().get(fromAlpha), channelWidth, fromAlpha, toAlpha));
+        return targetValues;
     }
 
 }
