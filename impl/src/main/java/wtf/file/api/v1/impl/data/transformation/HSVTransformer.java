@@ -25,19 +25,19 @@ public class HSVTransformer implements Transformer{
         int m = v - c;
 
         int rp = 0, gp = 0, bp = 0;
-        if (h < 60) {
+        if (normalH < 60) {
             rp = c;
             gp = x;
-        } else if (h < 120) {
+        } else if (normalH < 120) {
             rp = x;
             gp = c;
-        } else if (h < 180) {
+        } else if (normalH < 180) {
             gp = c;
             bp = x;
-        } else if (h < 240) {
+        } else if (normalH < 240) {
             gp = x;
             bp = c;
-        } else if (h < 300) {
+        } else if (normalH < 300) {
             rp = x;
             bp = c;
         } else {
@@ -58,12 +58,12 @@ public class HSVTransformer implements Transformer{
         int h, s, v;
 
         if (diff == 0) h = 0;
-        else if (max == red) h = (int) Math.round(((float) (60 * (green - blue)) / diff)) % 360;
-        else if (max == green) h = (int) Math.round(((float) (60 * (blue - red)) / diff) + 120);
-        else h = (int) Math.round(((float) (60 * (red - green)) / diff) + 240);
+        else if (max == red) h = Math.round(((float) (60 * (green - blue)) / diff)) % 360;
+        else if (max == green) h = Math.round(((float) (60 * (blue - red)) / diff) + 120);
+        else h = Math.round(((float) (60 * (red - green)) / diff) + 240);
         h = h / 360 * getMaxValue(channelWidth);
 
-        s = max == 0 ? 0 : (int) Math.round((float) diff / max * getMaxValue(channelWidth));
+        s = max == 0 ? 0 : Math.round((float) diff / max * getMaxValue(channelWidth));
         v = max;
 
         return Map.of(HUE, (short) h, SATURATION, (short) s, VALUE, (short) v);
