@@ -1,19 +1,19 @@
 package wtf.file.api.v1.pixel.type;
 
 import wtf.file.api.color.channel.ColorChannel;
-import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.exception.WtfException;
+import wtf.file.api.util.NumberUtil;
 import wtf.file.api.v1.decoding.clut.ClutInformation;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 public class ReferencePixelInformation extends PixelInformation {
-    
+
     private final int frameReference;
     private final int xReference;
     private final int yReference;
-    
+
     public ReferencePixelInformation(int frame, int x, int y, PixelType type, int frameReference, int xReference, int yReference) throws WtfException {
         super(frame, x, y, type);
 
@@ -68,17 +68,9 @@ public class ReferencePixelInformation extends PixelInformation {
         }
 
         visited.add(this);
-        if (frameReference < 0 || frameReference >= pixelInformation.length) {
-            throw new NumberOutOfBoundsException(0, pixelInformation.length - 1, frameReference);
-        }
-
-        if (xReference < 0 || xReference >= pixelInformation[frameReference].length) {
-            throw new NumberOutOfBoundsException(0, pixelInformation[frameReference].length - 1, xReference);
-        }
-
-        if (yReference < 0 || yReference >= pixelInformation[frameReference][xReference].length) {
-            throw new NumberOutOfBoundsException(0, pixelInformation[frameReference][xReference].length - 1, yReference);
-        }
+        NumberUtil.checkBounds(frameReference, 0, pixelInformation.length - 1, "frameReference");
+        NumberUtil.checkBounds(xReference, 0, pixelInformation[frameReference].length - 1, "xReference");
+        NumberUtil.checkBounds(yReference, 0, pixelInformation[frameReference][xReference].length - 1, "yReference");
 
         PixelInformation pixelInformationReference = pixelInformation[frameReference][xReference][yReference];
         if (pixelInformationReference != null) {

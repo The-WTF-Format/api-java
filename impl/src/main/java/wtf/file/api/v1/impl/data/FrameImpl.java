@@ -4,31 +4,16 @@ import wtf.file.api.data.Frame;
 import wtf.file.api.data.Pixel;
 import wtf.file.api.exception.NotYetImplementedException;
 import wtf.file.api.exception.NumberOutOfBoundsException;
+import wtf.file.api.util.NumberUtil;
 
 import java.awt.*;
 
-public class FrameImpl implements Frame {
-
-    private final Pixel[][] pixels;
-
-    public FrameImpl(Pixel[][] pixels) {
-        this.pixels = pixels;
-    }
-
-    @Override
-    public Pixel[][] pixels() {
-        return pixels;
-    }
+public record FrameImpl(Pixel[][] pixels) implements Frame {
 
     @Override
     public Pixel at(int x, int y) throws NumberOutOfBoundsException {
-        if (x < 0 || x >= pixels.length) {
-            throw new NumberOutOfBoundsException(0, pixels.length - 1, x);
-        }
-
-        if (y < 0 || y >= pixels[x].length) {
-            throw new NumberOutOfBoundsException(0, pixels[x].length - 1, y);
-        }
+        NumberUtil.checkBounds(x, 0, pixels.length - 1, "x");
+        NumberUtil.checkBounds(y, 0, pixels[0].length - 1, "y");
 
         return pixels[x][y];
     }

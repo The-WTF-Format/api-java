@@ -15,6 +15,6 @@ public interface DefaultValue {
      * @param channelWidth the bit width of the color channel
      * @return the default value as a {@link Long}
      */
-    Long forChannelWidth(short channelWidth);
+    short forChannelWidth(int channelWidth);
 
 }

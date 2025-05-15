@@ -30,8 +30,8 @@ public class ZeroDefaultValue implements DefaultValue {
      * @return {@code 0L} as the default value
      */
     @Override
-    public Long forChannelWidth(short channelWidth) {
-        return 0L;
+    public short forChannelWidth(int channelWidth) {
+        return 0;
     }
 
 }

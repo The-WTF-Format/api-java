@@ -72,12 +72,12 @@ public enum ColorSpace {
     public Map<ColorChannel, DefaultValue> defaultColor() {
         final Map<ColorChannel, DefaultValue> defaultColor = new HashMap<>();
 
-        // current default is for all channels 0 (black or transparent)
+        // the current default is for all channels 0 (black or transparent)
         for (ColorChannel channel : channels) {
             defaultColor.put(channel, ZeroDefaultValue.INSTANCE);
         }
 
         return defaultColor;
     }
-    
+
 }

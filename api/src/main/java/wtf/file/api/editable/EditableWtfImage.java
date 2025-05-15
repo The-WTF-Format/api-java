@@ -28,7 +28,7 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
 
     /**
      * Sets the width of the editable image.
-     * The specified width must be within valid bounds for the image dimensions (0 - 65 535).
+     * The specified width must be within valid bounds for the image dimensions (0-65 535).
      * <p>
      * If the image gets bigger by this, every new pixel will have the default color of this image's color space.
      * If the image gets smaller, data is truncated from the right of the image.
@@ -41,7 +41,7 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
 
     /**
      * Sets the height of the editable image.
-     * The specified height must be within valid bounds for the image dimensions (0 - 65 535).
+     * The specified height must be within valid bounds for the image dimensions (0-65 535).
      * <p>
      * If the image gets larger due to this operation, new rows of pixels will have the default color of this image's color space.
      * If the image gets smaller, data is truncated from the bottom of the image.
@@ -72,7 +72,7 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
      * Sets the channel width of the editable image.
      * The channel width specifies the bit depth per channel, determining the amount
      * of information stored per individual color channel (e.g., red, green, blue) or alpha channel.
-     * The value must be within valid bounds for the channel width (1 - 8).
+     * The value must be within valid bounds for the channel width (1-8).
      * <p>
      * The api tries to represent the color as best as possible in the new channel width.
      *

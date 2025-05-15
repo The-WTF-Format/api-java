@@ -4,7 +4,6 @@ import org.jetbrains.annotations.Contract;
 import wtf.file.api.WtfImage;
 import wtf.file.api.WtfLoader;
 import wtf.file.api.color.ColorSpace;
-import wtf.file.api.exception.NotYetImplementedException;
 import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.exception.ValueNotSetException;
 import wtf.file.api.version.Version;
@@ -22,7 +21,7 @@ import wtf.file.api.version.Version;
  * @see WtfLoader#by
  * @see WtfImage
  */
-public class WtfImageBuilder {
+public interface WtfImageBuilder {
 
     /**
      * Sets the version for the WtfImage being built.
@@ -33,9 +32,7 @@ public class WtfImageBuilder {
      * @see Version#VERSION_1
      */
     @Contract(value = "_ -> this", mutates = "this")
-    public WtfImageBuilder version(Version version) {
-        throw new NotYetImplementedException("Setting version");
-    }
+    WtfImageBuilder version(Version version);
 
 
     /**
@@ -44,12 +41,10 @@ public class WtfImageBuilder {
      *
      * @param width the width of the image in pixels
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided height value is out of the acceptable range (1 - 65 535)
+     * @throws NumberOutOfBoundsException if the provided height value is out of the acceptable range (1-65 535)
      */
     @Contract(value = "_ -> this", mutates = "this")
-    public WtfImageBuilder width(int width) throws NumberOutOfBoundsException  {
-        throw new NotYetImplementedException("Setting width");
-    }
+    WtfImageBuilder width(int width) throws NumberOutOfBoundsException;
 
     /**
      * Sets the height of the WtfImage being built.
@@ -57,12 +52,10 @@ public class WtfImageBuilder {
      *
      * @param height the height of the image in pixels
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided height value is out of the acceptable range (1 - 65 535)
+     * @throws NumberOutOfBoundsException if the provided height value is out of the acceptable range (1-65 535)
      */
     @Contract(value = "_ -> this", mutates = "this")
-    public WtfImageBuilder height(int height) throws NumberOutOfBoundsException {
-        throw new NotYetImplementedException("Setting height");
-    }
+    WtfImageBuilder height(int height) throws NumberOutOfBoundsException;
 
     /**
      * Sets the color space of the WtfImage being built.
@@ -74,9 +67,7 @@ public class WtfImageBuilder {
      * @see ColorSpace
      */
     @Contract(value = "_ -> this", mutates = "this")
-    public WtfImageBuilder colorSpace(ColorSpace colorSpace) {
-        throw new NotYetImplementedException("Setting color space");
-    }
+    WtfImageBuilder colorSpace(ColorSpace colorSpace);
 
     /**
      * Sets the channel width for the WtfImage being built.
@@ -85,12 +76,10 @@ public class WtfImageBuilder {
      *
      * @param channelWidth the width of the channel in bits
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided channelWidth value is out of the acceptable range (1 - 255)
+     * @throws NumberOutOfBoundsException if the provided channelWidth value is out of the acceptable range (1-255)
      */
     @Contract(value = "_ -> this", mutates = "this")
-    public WtfImageBuilder channelWidth(short channelWidth) throws NumberOutOfBoundsException {
-        throw new NotYetImplementedException("Setting channel width");
-    }
+    WtfImageBuilder channelWidth(short channelWidth) throws NumberOutOfBoundsException;
 
     /**
      * Sets the number of frames for the WtfImage being built.
@@ -99,12 +88,10 @@ public class WtfImageBuilder {
      *
      * @param frames the number of frames
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided frames value is out of the acceptable range (1 - 255)
+     * @throws NumberOutOfBoundsException if the provided frames value is out of the acceptable range (1-255)
      */
     @Contract(value = "_ -> this", mutates = "this")
-    public WtfImageBuilder frames(int frames) throws NumberOutOfBoundsException {
-        throw new NotYetImplementedException("Setting frames");
-    }
+    WtfImageBuilder frames(int frames) throws NumberOutOfBoundsException;
 
     /**
      * Sets the frames per second (fps) for the WtfImage being built.
@@ -112,12 +99,10 @@ public class WtfImageBuilder {
      *
      * @param fps the frames per second value
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided fps value is out of the acceptable range (1 - 127)
+     * @throws NumberOutOfBoundsException if the provided fps value is out of the acceptable range (1-127)
      */
     @Contract(value = "_ -> this", mutates = "this")
-    public WtfImageBuilder framesPerSecond(int fps) throws NumberOutOfBoundsException {
-        throw new NotYetImplementedException("Setting frames per second");
-    }
+    WtfImageBuilder framesPerSecond(int fps) throws NumberOutOfBoundsException;
 
     /**
      * Sets the seconds per frame for the WtfImage being built.
@@ -125,12 +110,10 @@ public class WtfImageBuilder {
      *
      * @param spf the seconds per frame, representing the duration of each frame in seconds
      * @return the current instance of WtfImageBuilder for method chaining
-     * @throws NumberOutOfBoundsException if the provided seconds per frame value is out of the acceptable range (1 - 127)
+     * @throws NumberOutOfBoundsException if the provided seconds per-frame value is out of the acceptable range (1-127)
      */
     @Contract(value = "_ -> this", mutates = "this")
-    public WtfImageBuilder secondsPerFrame(int spf) throws NumberOutOfBoundsException {
-        throw new NotYetImplementedException("Setting seconds per frame");
-    }
+    WtfImageBuilder secondsPerFrame(int spf) throws NumberOutOfBoundsException;
 
     /**
      * Builds and returns an instance of {@code WtfImage} based on the properties
@@ -145,8 +128,6 @@ public class WtfImageBuilder {
      * @see ColorSpace#defaultColor
      */
     @Contract(value = "-> new", pure = true)
-    public WtfImage build() throws ValueNotSetException {
-        throw new NotYetImplementedException("Building WtfImage");
-    }
+    WtfImage build() throws ValueNotSetException;
 
 }
