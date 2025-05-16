@@ -61,7 +61,7 @@ public class HSVTransformer implements Transformer{
         else if (max == red) h = Math.round(((float) (60 * (green - blue)) / diff)) % 360;
         else if (max == green) h = Math.round(((float) (60 * (blue - red)) / diff) + 120);
         else h = Math.round(((float) (60 * (red - green)) / diff) + 240);
-        h = h / 360 * NumberUtil.getMaxValue(channelWidth);
+        h = h * NumberUtil.getMaxValue(channelWidth) / 360;
 
         s = max == 0 ? 0 : Math.round((float) diff / max * NumberUtil.getMaxValue(channelWidth));
         v = max;
