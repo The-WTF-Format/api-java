@@ -6,25 +6,30 @@ import java.util.List;
 import java.util.Map;
 
 public class MetadataContainerImpl implements MetadataContainer {
+    private final Map<String, String> metadata;
+
+    public MetadataContainerImpl(Map<String, String> metadata) {
+        this.metadata = metadata;
+    }
 
     @Override
     public boolean has(String key) {
-        return false;
+        return metadata.containsKey(key);
     }
 
     @Override
     public List<String> keys() {
-        return List.of();
+        return List.copyOf(metadata.keySet());
     }
 
     @Override
     public String get(String key) {
-        return "";
+        return metadata.getOrDefault(key, null);
     }
 
     @Override
     public Map<String, String> asMap() {
-        return Map.of();
+        return Map.copyOf(metadata);
     }
 
 }
