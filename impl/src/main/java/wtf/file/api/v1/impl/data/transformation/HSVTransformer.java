@@ -17,14 +17,14 @@ public class HSVTransformer implements Transformer{
     public Map<ColorChannel, Short> toRgb(Map<ColorChannel, Short> values, int channelWidth) {
         int h = values.get(HUE), s = values.get(SATURATION), v = values.get(VALUE);
 
-        int normalH = h / NumberUtil.getMaxValue(channelWidth) * 360;
-        int normalS = s / NumberUtil.getMaxValue(channelWidth) * 255;
+        double normalH = h * 360.0 / NumberUtil.getMaxValue(channelWidth);
+        double normalS = s * 255.0 / NumberUtil.getMaxValue(channelWidth);
 
-        int c = v * normalS;
-        int x = c * (1 - Math.abs(normalH / 60 % 2 - 1));
-        int m = v - c;
+        double c = v * normalS;
+        double x = c * (1 - Math.abs(normalH / 60 % 2 - 1));
+        double m = v - c;
 
-        int rp = 0, gp = 0, bp = 0;
+        double rp = 0, gp = 0, bp = 0;
         if (normalH < 60) {
             rp = c;
             gp = x;
