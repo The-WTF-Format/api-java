@@ -113,11 +113,12 @@ public class EditableWtfImageImpl implements EditableWtfImage {
     public void save(Path path, DataCompressionType dataCompressionType) throws IOException, WtfException {
         byte[] bytes = V1Encoder.encode(this, dataCompressionType);
 
-        if (!Files.exists(path.getParent())) {
-            Files.createDirectories(path.getParent());
+        Path absolutePath = path.toAbsolutePath();
+        if (absolutePath.getParent() != null && !Files.exists(absolutePath.getParent())) {
+            Files.createDirectories(absolutePath.getParent());
         }
 
-        Files.write(path, bytes);
+        Files.write(absolutePath, bytes);
     }
 
     @Override
