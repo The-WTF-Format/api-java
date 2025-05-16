@@ -7,6 +7,7 @@ import wtf.file.api.editable.compression.DataCompressionType;
 import wtf.file.api.editable.data.EditableFrame;
 import wtf.file.api.editable.metadata.EditableMetadataContainer;
 import wtf.file.api.exception.NumberOutOfBoundsException;
+import wtf.file.api.exception.WtfException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -88,13 +89,26 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
     EditableMetadataContainer metadataContainer();
 
     /**
+     * Returns the current instance of {@code EditableWtfImage}.
+     * This method is used as a default implementation for editing or modifying
+     * the current editable image.
+     *
+     * @return the current instance of {@code EditableWtfImage}
+     */
+    @Override
+    default EditableWtfImage edit() {
+        return this;
+    }
+
+    /**
      * Saves the current editable image to the specified file path using the provided compression settings.
      *
      * @param path the file path where the image will be saved; must not be null
      * @param dataCompressionType the type of compression applied to the image data; must not be null
      * @throws IOException if an I/O error occurs during the save operation
+     * @throws WtfException if an error occurs encoding the image data
      */
-    void save(Path path, DataCompressionType dataCompressionType) throws IOException;
+    void save(Path path, DataCompressionType dataCompressionType) throws IOException, WtfException;
 
     /**
      * Saves the current editable image to the specified file path using default compression settings.
@@ -102,8 +116,9 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
      *
      * @param path the file path where the image will be saved; must not be null
      * @throws IOException if an I/O error occurs during the save operation
+     * @throws WtfException if an error occurs encoding the image data
      */
-    default void save(Path path) throws IOException {
+    default void save(Path path) throws IOException, WtfException {
         save(path, DataCompressionType.MAPPED_COMPRESSION);
     }
 

@@ -1,6 +1,7 @@
 package wtf.file.api.v1.impl.data.transformation;
 
 import wtf.file.api.color.channel.ColorChannel;
+import wtf.file.api.util.NumberUtil;
 
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class YCbCrTransformer implements Transformer{
     public Map<ColorChannel, Short> toRgb(Map<ColorChannel, Short> values, int channelWidth) {
         short y = values.get(LUMA), cb = values.get(CHROMA_BLUE), cr = values.get(CHROMA_RED);
 
-        short maxValue = getMaxValue(channelWidth);
+        int maxValue = NumberUtil.getMaxValue(channelWidth);
 
         cb -= (short) (maxValue / 2);
         cr -= (short) (maxValue / 2);
@@ -36,7 +37,7 @@ public class YCbCrTransformer implements Transformer{
     public Map<ColorChannel, Short> fromRgb(Map<ColorChannel, Short> values, int channelWidth) {
         short r = values.get(RED), g = values.get(GREEN), b = values.get(BLUE);
 
-        short maxValue = getMaxValue(channelWidth);
+        int maxValue = NumberUtil.getMaxValue(channelWidth);
 
         int y = (int) (0.299 * r + 0.587 * g + 0.114 * b);
         int cb = (int) ((-0.1687 * r - 0.3313 * g + 0.5 * b) + ((double) maxValue / 2));

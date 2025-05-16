@@ -1,6 +1,7 @@
 package wtf.file.api.v1.impl.data.transformation;
 
 import wtf.file.api.color.channel.ColorChannel;
+import wtf.file.api.util.NumberUtil;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class CMYTransformer implements Transformer{
 
     @Override
     public Map<ColorChannel, Short> toRgb(Map<ColorChannel, Short> values, int channelWidth) {
-        int maxValue = getMaxValue(channelWidth);
+        int maxValue = NumberUtil.getMaxValue(channelWidth);
         return Map.of(
             RED, (short) (maxValue - values.get(CYAN)),
             GREEN, (short) (maxValue - values.get(MAGENTA)),
@@ -24,7 +25,7 @@ public class CMYTransformer implements Transformer{
 
     @Override
     public Map<ColorChannel, Short> fromRgb(Map<ColorChannel, Short> values, int channelWidth) {
-        int maxValue = getMaxValue(channelWidth);
+        int maxValue = NumberUtil.getMaxValue(channelWidth);
         return Map.of(
             CYAN, (short) (maxValue - values.get(RED)),
             MAGENTA, (short) (maxValue - values.get(GREEN)),

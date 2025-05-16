@@ -10,4 +10,7 @@ public class NumberUtil {
         }
     }
 
+    public static int getMaxValue(int channelWidth) {
+        return (int) Math.pow(2, channelWidth) - 1;
+    }
 }

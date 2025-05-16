@@ -10,10 +10,4 @@ public interface Transformer {
 
     Map<ColorChannel, Short> fromRgb(Map<ColorChannel, Short> values, int channelWidth);
 
-    default short getMaxValue(int channelWidth) {
-        return (short) (Math.pow(2, channelWidth) - 1);
-    }
-
-
-
 }

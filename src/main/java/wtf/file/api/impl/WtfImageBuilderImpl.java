@@ -6,6 +6,7 @@ import wtf.file.api.color.ColorSpace;
 import wtf.file.api.data.Pixel;
 import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.exception.ValueNotSetException;
+import wtf.file.api.util.ColorUtil;
 import wtf.file.api.util.NumberUtil;
 import wtf.file.api.v1.decoding.header.HeaderInformation;
 import wtf.file.api.v1.impl.WtfImageImpl;
@@ -13,8 +14,6 @@ import wtf.file.api.v1.impl.data.PixelImpl;
 import wtf.file.api.version.Version;
 
 import java.util.Arrays;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class WtfImageBuilderImpl implements WtfImageBuilder {
 
@@ -100,17 +99,11 @@ public class WtfImageBuilderImpl implements WtfImageBuilder {
                 }
 
                 Pixel pixel = new PixelImpl(
+                    ColorUtil.getDefaultColors(colorSpace, channelWidth),
                     this.colorSpace,
-                    colorSpace.defaultColor()
-                        .entrySet()
-                        .stream()
-                        .map(entry -> Map.entry(
-                            entry.getKey(),
-                            entry.getValue().forChannelWidth(this.channelWidth))
-                        ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
                     this.channelWidth);
 
-                Pixel[][][] pixels = new Pixel[this.frames][this.height][this.width];
+                Pixel[][][] pixels = new Pixel[this.frames][this.width][this.height];
                 Arrays.stream(pixels).forEach(row -> Arrays.stream(row).forEach(col -> Arrays.fill(col, pixel)));
 
                 yield new WtfImageImpl(

@@ -1,26 +1,24 @@
 package wtf.file.api.v1.impl.data;
 
 import wtf.file.api.color.ColorSpace;
-import wtf.file.api.color.ColorSpaceChannels;
 import wtf.file.api.color.channel.ColorChannel;
-import wtf.file.api.color.channel.FixedColorChannel;
 import wtf.file.api.data.Pixel;
-import wtf.file.api.v1.impl.data.transformation.*;
+import wtf.file.api.exception.NumberOutOfBoundsException;
+import wtf.file.api.util.ColorUtil;
+import wtf.file.api.util.NumberUtil;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
 public class PixelImpl implements Pixel {
 
-    private final ColorSpace colorSpace;
     private final Map<ColorChannel, Short> values;
-    private final int channelWidth;
-    private final HashMap<ColorSpace, Pixel> colorChannelCache = new HashMap<>();
+    private final ColorSpace colorSpace;
+    protected final int channelWidth;
 
-    public PixelImpl(ColorSpace colorSpace, Map<ColorChannel, Short> values, int channelWidth) {
-        this.colorSpace = colorSpace;
+    public PixelImpl(Map<ColorChannel, Short> values, ColorSpace colorSpace, int channelWidth) {
         this.values = Map.copyOf(values);
+        this.colorSpace = colorSpace;
         this.channelWidth = channelWidth;
 
         if (!values.keySet().equals(new HashSet<>(colorSpace.channels()))) {
@@ -40,7 +38,7 @@ public class PixelImpl implements Pixel {
 
     @Override
     public short valueOf(ColorChannel channel) {
-        Short value = values.get(channel);
+        Short value = this.values().get(channel);
         if (value == null) {
             throw new IllegalArgumentException("The channel " + channel + " is not part of this pixel's color space");
         }
@@ -49,54 +47,24 @@ public class PixelImpl implements Pixel {
     }
 
     @Override
-    public Pixel as(ColorSpace colorSpace) {
+    public Pixel withColorSpace(ColorSpace colorSpace) {
         if (colorSpace == this.colorSpace()) {
             return this;
         }
 
-        colorChannelCache.computeIfAbsent(colorSpace, cs -> new PixelImpl(cs, this.transform(cs), this.channelWidth));
-        return colorChannelCache.get(colorSpace);
+        return new PixelImpl(ColorUtil.toColorSpace(this.values(), this.colorSpace, colorSpace, this.channelWidth),
+            colorSpace, channelWidth);
     }
 
-    private Map<ColorChannel, Short> transform(ColorSpace colorSpace) {
-        Map<ColorChannel, Short> rgbValues = switch (this.colorSpace) {
-            case GRAY_SCALE, GRAY_SCALE_A, DYNAMIC_GRAY_SCALE_A ->
-                GrayScaleTransformer.INSTANCE.toRgb(this.values(), this.channelWidth);
-            case RGB, RGBa, DYNAMIC_RGBa -> new HashMap<>(this.values());
-            case CMY, CMYa, DYNAMIC_CMYa -> CMYTransformer.INSTANCE.toRgb(this.values(), this.channelWidth);
-            case HSV, HSVa, DYNAMIC_HSVa -> HSVTransformer.INSTANCE.toRgb(this.values(), this.channelWidth);
-            case YCbCr, YCbCra, DYNAMIC_YCbCra -> YCbCrTransformer.INSTANCE.toRgb(this.values(), this.channelWidth);
-        };
-
-        if (rgbValues instanceof HashMap<ColorChannel, Short>) {
-            rgbValues.remove(ColorSpaceChannels.FIXED_ALPHA);
-            rgbValues.remove(ColorSpaceChannels.DYNAMIC_ALPHA);
+    @Override
+    public Pixel withWidth(int channelWidth) throws NumberOutOfBoundsException {
+        NumberUtil.checkBounds(channelWidth, 1, 16, "channelWidth");
+        if (this.channelWidth == channelWidth) {
+            return this;
         }
 
-        Map<ColorChannel, Short> targetValues = new HashMap<>(switch (colorSpace) {
-            case GRAY_SCALE, GRAY_SCALE_A, DYNAMIC_GRAY_SCALE_A ->
-                GrayScaleTransformer.INSTANCE.fromRgb(rgbValues, this.channelWidth);
-            case RGB, RGBa, DYNAMIC_RGBa -> rgbValues;
-            case CMY, CMYa, DYNAMIC_CMYa -> CMYTransformer.INSTANCE.fromRgb(rgbValues, this.channelWidth);
-            case HSV, HSVa, DYNAMIC_HSVa -> HSVTransformer.INSTANCE.fromRgb(rgbValues, this.channelWidth);
-            case YCbCr, YCbCra, DYNAMIC_YCbCra -> YCbCrTransformer.INSTANCE.fromRgb(rgbValues, this.channelWidth);
-        });
-
-        ColorChannel fromAlpha = AlphaTransformer.INSTANCE.getAlphaChannel(this.colorSpace);
-        ColorChannel toAlpha = AlphaTransformer.INSTANCE.getAlphaChannel(colorSpace);
-
-        if (toAlpha == null) return targetValues;
-        if (fromAlpha == null) {
-            if (toAlpha instanceof FixedColorChannel) {
-                targetValues.put(toAlpha, (short) 1);
-            } else {
-                targetValues.put(toAlpha, (short) Math.round(Math.pow(2, channelWidth) - 1));
-            }
-            return targetValues;
-        }
-
-        targetValues.put(toAlpha, AlphaTransformer.INSTANCE.transform(this.values().get(fromAlpha), channelWidth, fromAlpha, toAlpha));
-        return targetValues;
+        return new PixelImpl(ColorUtil.toChannelWidth(this.values(), this.channelWidth, channelWidth),
+            colorSpace, channelWidth);
     }
 
 }
