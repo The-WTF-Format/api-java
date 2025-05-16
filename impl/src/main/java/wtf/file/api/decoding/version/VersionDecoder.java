@@ -10,10 +10,9 @@ public class VersionDecoder {
     @NotNull
     public static Version decode(ReadBitStream bitStream) throws WtfException {
         int versionByte = bitStream.readByte();
-        if (versionByte == 0x01) {
-            return Version.VERSION_1;
-        } else {
-            throw new WtfException("Unknown version code: " + versionByte);
-        }
+        return switch (versionByte) {
+            case 0x01 -> Version.VERSION_1;
+            default -> throw new WtfException("Unknown version code: " + versionByte);
+        };
     }
 }

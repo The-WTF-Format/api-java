@@ -7,7 +7,7 @@ import wtf.file.api.color.ColorSpace;
 import wtf.file.api.exception.NotYetImplementedException;
 import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.exception.ValueNotSetException;
-import wtf.file.api.v1.version.Version;
+import wtf.file.api.version.Version;
 
 /**
  * The WtfImageBuilder class provides a fluent API for constructing instances of WtfImage.

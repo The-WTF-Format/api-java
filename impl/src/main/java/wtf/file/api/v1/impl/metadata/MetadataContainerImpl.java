@@ -19,7 +19,7 @@ public class MetadataContainerImpl implements MetadataContainer {
 
     @Override
     public List<String> keys() {
-        return List.copyOf(metadata.keySet());
+        return List.of();
     }
 
     @Override

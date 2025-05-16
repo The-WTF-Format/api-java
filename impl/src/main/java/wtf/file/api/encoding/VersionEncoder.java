@@ -7,12 +7,10 @@ import wtf.file.api.version.Version;
 public class VersionEncoder {
 
     public static void encode(Version version, WriteBitStream bitStream) throws WtfException {
-        byte versionByte;
-        if (version == Version.VERSION_1) {
-            versionByte = 1;
-        } else {
-            throw new WtfException("Unknown version: " + version);
-        }
+        byte versionByte = switch (version) {
+            case Version.VERSION_1 -> 1;
+            default -> throw new WtfException("Unknown version: " + version);
+        };
         bitStream.write(versionByte);
     }
 }
