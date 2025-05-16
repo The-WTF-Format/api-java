@@ -5,6 +5,7 @@ import wtf.file.api.color.channel.ColorChannel;
 import wtf.file.api.color.channel.FixedColorChannel;
 import wtf.file.api.color.value.MaxDefaultValue;
 import wtf.file.api.color.value.ZeroDefaultValue;
+import wtf.file.api.util.NumberUtil;
 
 public class AlphaTransformer {
 
@@ -24,7 +25,7 @@ public class AlphaTransformer {
         }
 
         // from dynamic to fixed
-        int threshold = (int) (Math.pow(2, channelWidth) - 1) / 2;
+        int threshold = NumberUtil.getMaxValue(channelWidth) / 2;
         if (alpha >= threshold) return 1;
         else return 0;
     }

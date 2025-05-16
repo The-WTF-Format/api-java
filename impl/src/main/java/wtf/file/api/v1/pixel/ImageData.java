@@ -21,7 +21,7 @@ public record ImageData(
         for (int frame = 0; frame < pixels.length; frame++) {
             for (int x = 0; x < pixels[frame].length; x++) {
                 for (int y = 0; y < pixels[frame][x].length; y++) {
-                    dereferencedPixels[frame][x][y] = new PixelImpl(colorSpace, pixels[frame][x][y].pixel(clutInformation, pixels), channelWidth);
+                    dereferencedPixels[frame][x][y] = new PixelImpl(pixels[frame][x][y].pixel(clutInformation, pixels), colorSpace, channelWidth);
                 }
             }
         }

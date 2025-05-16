@@ -1,6 +1,7 @@
 package wtf.file.api.v1.impl.data.transformation;
 
 import wtf.file.api.color.channel.ColorChannel;
+import wtf.file.api.util.NumberUtil;
 
 import java.util.Map;
 
@@ -16,8 +17,8 @@ public class HSVTransformer implements Transformer{
     public Map<ColorChannel, Short> toRgb(Map<ColorChannel, Short> values, int channelWidth) {
         int h = values.get(HUE), s = values.get(SATURATION), v = values.get(VALUE);
 
-        int normalH = h / getMaxValue(channelWidth) * 360;
-        int normalS = s / getMaxValue(channelWidth) * 255;
+        int normalH = h / NumberUtil.getMaxValue(channelWidth) * 360;
+        int normalS = s / NumberUtil.getMaxValue(channelWidth) * 255;
 
         int c = v * normalS;
         int x = c * (1 - Math.abs(normalH / 60 % 2 - 1));
@@ -60,9 +61,9 @@ public class HSVTransformer implements Transformer{
         else if (max == red) h = Math.round(((float) (60 * (green - blue)) / diff)) % 360;
         else if (max == green) h = Math.round(((float) (60 * (blue - red)) / diff) + 120);
         else h = Math.round(((float) (60 * (red - green)) / diff) + 240);
-        h = h / 360 * getMaxValue(channelWidth);
+        h = h / 360 * NumberUtil.getMaxValue(channelWidth);
 
-        s = max == 0 ? 0 : Math.round((float) diff / max * getMaxValue(channelWidth));
+        s = max == 0 ? 0 : Math.round((float) diff / max * NumberUtil.getMaxValue(channelWidth));
         v = max;
 
         return Map.of(HUE, (short) h, SATURATION, (short) s, VALUE, (short) v);

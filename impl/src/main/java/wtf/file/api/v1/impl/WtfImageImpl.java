@@ -9,6 +9,7 @@ import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.metadata.MetadataContainer;
 import wtf.file.api.v1.decoding.header.HeaderInformation;
 import wtf.file.api.v1.impl.animation.AnimationInformationImpl;
+import wtf.file.api.v1.impl.editable.EditableWtfImageImpl;
 import wtf.file.api.version.Version;
 
 import java.awt.*;
@@ -66,7 +67,11 @@ public class WtfImageImpl implements WtfImage {
 
     @Override
     public EditableWtfImage edit() {
-        return null;
+        return new EditableWtfImageImpl(
+            this.width, this.height,
+            this.colorSpace, this.channelWidth,
+            this.animationInformation
+        );
     }
 
     @Override
@@ -81,7 +86,7 @@ public class WtfImageImpl implements WtfImage {
 
     @Override
     public Image asJavaImage() {
-        return null;
+        return this.animationInformation.frame(0).asJavaImage();
     }
 
 }

@@ -1,6 +1,7 @@
 package wtf.file.api.v1.impl.animation;
 
 import wtf.file.api.animation.AnimationInformation;
+import wtf.file.api.color.ColorSpace;
 import wtf.file.api.data.Frame;
 import wtf.file.api.data.Pixel;
 import wtf.file.api.util.NumberUtil;
@@ -15,6 +16,8 @@ public class AnimationInformationImpl implements AnimationInformation  {
     private final int frames;
     private final HeaderInformation.FrameCoding frameCoding;
     private final int timingValue;
+    private final ColorSpace colorSpace;
+    private final int channelWidth;
     private final Pixel[][][] pixels;
     private final Map<Integer, Frame> frameStore = new HashMap<>();
 
@@ -22,6 +25,8 @@ public class AnimationInformationImpl implements AnimationInformation  {
         this.frames = headerInformation.frames();
         this.frameCoding = headerInformation.frameTiming();
         this.timingValue = headerInformation.frameTimingValue();
+        this.colorSpace = headerInformation.colorSpace();
+        this.channelWidth = headerInformation.channelWidth();
         this.pixels = pixels;
     }
 
@@ -50,8 +55,12 @@ public class AnimationInformationImpl implements AnimationInformation  {
     public Frame frame(int index) {
         NumberUtil.checkBounds(index, 0, this.frames - 1, "index");
 
-        frameStore.computeIfAbsent(index, i -> new FrameImpl(this.pixels[i]));
+        frameStore.computeIfAbsent(index, i -> new FrameImpl(this.pixels[i], colorSpace, channelWidth));
         return frameStore.get(index);
+    }
+
+    public Pixel[][][] data() {
+        return this.pixels;
     }
 
 }

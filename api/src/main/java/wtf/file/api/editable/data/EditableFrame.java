@@ -3,7 +3,7 @@ package wtf.file.api.editable.data;
 import wtf.file.api.data.Frame;
 import wtf.file.api.exception.NumberOutOfBoundsException;
 
-import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * An interface extending {@link Frame} to provide editable functionality for individual image frames.
@@ -28,14 +28,14 @@ public interface EditableFrame extends Frame {
     EditablePixel at(int x, int y) throws NumberOutOfBoundsException;
 
     /**
-     * Sets the content of this frame using a standard Java {@link Image}.
+     * Sets the content of this frame using a standard Java {@link BufferedImage}.
      * <p>
-     * This method allows the frame to be populated with an {@link Image}, which could be used
+     * This method allows the frame to be populated with an {@link BufferedImage}, which could be used
      * to import image data or manipulate the frame based on external image sources.
      * </p>
      *
-     * @param image the {@link Image} to set as the content of this frame.
+     * @param image the {@link BufferedImage} to set as the content of this frame.
      */
-    void byJavaImage(Image image);
+    void byJavaImage(BufferedImage image);
 
 }
