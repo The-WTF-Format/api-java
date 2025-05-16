@@ -55,7 +55,7 @@ public class EditableAnimationInformationImpl implements EditableAnimationInform
             Map<ColorChannel, Short> defaultValues = ColorUtil.getDefaultColors(colorSpace, channelWidth);
 
             for (int i = 0; i < delta; i++) {
-                int frame = this.frames + i;
+                int frame = this.pixels.length - delta + i;
                 for (int x = 0; x < this.pixels[frame].length; x++) {
                     for (int y = 0; y < this.pixels[frame][x].length; y++) {
                         this.pixels[frame][x][y] = new EditablePixelImpl(defaultValues, colorSpace, channelWidth);
@@ -124,15 +124,13 @@ public class EditableAnimationInformationImpl implements EditableAnimationInform
         for (int frame = 0; frame < this.pixels.length; frame++) {
             this.pixels[frame] = Arrays.copyOf(this.pixels[frame], width);
 
-            if (delta > 0) {
-                for (int i = 0; i < delta; i++) {
-                    int x = this.pixels[frame].length + delta;
-                    for (int y = 0; y < this.pixels[frame][x].length; y++) {
-                        this.pixels[frame][x][y] = new EditablePixelImpl(
-                            ColorUtil.getDefaultColors(colorSpace, channelWidth),
-                            colorSpace, channelWidth
-                        );
-                    }
+            for (int i = 0; i < delta; i++) {
+                int x = this.pixels[frame].length - delta + i;
+                for (int y = 0; y < this.pixels[frame][x].length; y++) {
+                    this.pixels[frame][x][y] = new EditablePixelImpl(
+                        ColorUtil.getDefaultColors(colorSpace, channelWidth),
+                        colorSpace, channelWidth
+                    );
                 }
             }
         }
@@ -147,14 +145,12 @@ public class EditableAnimationInformationImpl implements EditableAnimationInform
             for (int x = 0; x < this.pixels[frame].length; x++) {
                 this.pixels[frame][x] = Arrays.copyOf(this.pixels[frame][x], height);
 
-                if (delta > 0) {
-                    for (int i = 0; i < delta; i++) {
-                        int y = this.pixels[frame][x].length + delta;
-                        this.pixels[frame][x][y] = new EditablePixelImpl(
-                            ColorUtil.getDefaultColors(colorSpace, channelWidth),
-                            colorSpace, channelWidth
-                        );
-                    }
+                for (int i = 0; i < delta; i++) {
+                    int y = this.pixels[frame][x].length - delta + i;
+                    this.pixels[frame][x][y] = new EditablePixelImpl(
+                        ColorUtil.getDefaultColors(colorSpace, channelWidth),
+                        colorSpace, channelWidth
+                    );
                 }
             }
         }
