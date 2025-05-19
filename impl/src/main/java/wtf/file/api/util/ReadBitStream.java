@@ -141,7 +141,7 @@ public class ReadBitStream {
     public String readUtf8() throws WtfException {
         byte read;
         List<Byte> bytes = new ArrayList<>();
-        while ((read = readBits(1)[0]) != 0) {
+        while ((read = readByte()) != 0) {
             bytes.add(read);
         }
 
@@ -150,8 +150,11 @@ public class ReadBitStream {
 
     public void skip(int amount) {
         bitIndex += amount;
-        byteIndex += amount / 8;
-        bitIndex %= 8;
+
+        if (bitIndex % 8 != 0) {
+            byteIndex += bitIndex / 8;
+            bitIndex %= 8;
+        }
     }
 
     public void skipBytePadding() {

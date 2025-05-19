@@ -15,7 +15,9 @@ public class HeaderEncoder {
         bitStream.write(ColorSpaceUtil.reverseColorSpaceMap().get(image.colorSpace()));
         bitStream.writeNumber(image.channelWidth(), 8);
 
-        HeaderInformation.FrameCoding frameCoding = image.animationInformation().isFpsCoded()
+        bitStream.writeNumber(image.animationInformation().frames(), 8);
+
+        HeaderInformation.FrameCoding frameCoding = image.animationInformation().isFpsCoded() || image.animationInformation().frames() == 1
                 ? HeaderInformation.FrameCoding.FPS_CODED
                 : HeaderInformation.FrameCoding.SPF_CODED;
         bitStream.write(frameCoding.flag(), 1);

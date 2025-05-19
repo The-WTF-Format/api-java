@@ -14,7 +14,9 @@ public class ReferencePixelInformation extends PixelInformation {
     private final int xReference;
     private final int yReference;
 
-    public ReferencePixelInformation(int frame, int x, int y, PixelType type, int frameReference, int xReference, int yReference) throws WtfException {
+    private Map<ColorChannel, Short> knowData = null;
+
+    public ReferencePixelInformation(int frame, int x, int y, PixelType type, int frameReference, int xReference, int yReference, int width) throws WtfException {
         super(frame, x, y, type);
 
         this.frameReference = getFrameReference(frame, x, y, frameReference);
@@ -23,7 +25,7 @@ public class ReferencePixelInformation extends PixelInformation {
             this.xReference = x;
             this.yReference = y;
         } else  if (xReference == -1 && yReference == -1) {
-            this.xReference = x == 0 ? Integer.MAX_VALUE : x - 1;
+            this.xReference = x == 0 ? width - 1 : x - 1;
             this.yReference = x == 0 ? y - 1 : y;
         } else {
             this.xReference = xReference;
@@ -63,20 +65,20 @@ public class ReferencePixelInformation extends PixelInformation {
 
     @Override
     public Map<ColorChannel, Short> pixel(ClutInformation clutInformation, PixelInformation[][][] pixelInformation, ArrayList<PixelInformation> visited) throws WtfException {
-        if (visited.contains(this)) {
-            throw new WtfException(String.format("Cyclic reference at [%d;%d;%d]", frame, x, y));
+        if (knowData == null) {
+            if (visited.contains(this)) {
+                throw new WtfException(String.format("Cyclic reference at [%d;%d;%d]", frame, x, y));
+            }
+
+            visited.add(this);
+            NumberUtil.checkBounds(frameReference, 0, pixelInformation.length - 1, "frameReference");
+            NumberUtil.checkBounds(xReference, 0, pixelInformation[frameReference].length - 1, "xReference");
+            NumberUtil.checkBounds(yReference, 0, pixelInformation[frameReference][xReference].length - 1, "yReference");
+
+            PixelInformation pixelInformationReference = pixelInformation[frameReference][xReference][yReference];
+            knowData = pixelInformationReference.pixel(clutInformation, pixelInformation, visited);
         }
 
-        visited.add(this);
-        NumberUtil.checkBounds(frameReference, 0, pixelInformation.length - 1, "frameReference");
-        NumberUtil.checkBounds(xReference, 0, pixelInformation[frameReference].length - 1, "xReference");
-        NumberUtil.checkBounds(yReference, 0, pixelInformation[frameReference][xReference].length - 1, "yReference");
-
-        PixelInformation pixelInformationReference = pixelInformation[frameReference][xReference][yReference];
-        if (pixelInformationReference != null) {
-            return pixelInformationReference.pixel(clutInformation, pixelInformation, visited);
-        }
-
-        throw new WtfException(String.format("Reference pixel at [%d;%d;%d] is null", frame, x, y));
+        return knowData;
     }
 }

@@ -2,40 +2,33 @@ package wtf.file.api.v1.impl.editable.metadata;
 
 import wtf.file.api.editable.metadata.EditableMetadataContainer;
 import wtf.file.api.exception.IllegalCharacterException;
+import wtf.file.api.v1.impl.metadata.MetadataContainerImpl;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-public class EditableMetadataContainerImpl implements EditableMetadataContainer {
+public class EditableMetadataContainerImpl extends MetadataContainerImpl implements EditableMetadataContainer {
+
+    public EditableMetadataContainerImpl(Map<String, String> metadata) {
+        super(new HashMap<>(metadata));
+    }
 
     @Override
     public void remove(String key) {
-
+        this.metadata.remove(key);
     }
 
     @Override
     public void set(String key, String value) throws IllegalCharacterException {
+        if (key.contains("\0")) {
+            throw new IllegalCharacterException('\0', "ASCII-Characters without 0x00");
+        }
 
-    }
+        if (value.contains("\0")) {
+            throw new IllegalCharacterException('\0', "UTF-8-Characters without 0x00");
+        }
 
-    @Override
-    public boolean has(String key) {
-        return false;
-    }
-
-    @Override
-    public List<String> keys() {
-        return List.of();
-    }
-
-    @Override
-    public String get(String key) {
-        return "";
-    }
-
-    @Override
-    public Map<String, String> asMap() {
-        return Map.of();
+        this.metadata.put(key, value);
     }
 
 }

@@ -31,6 +31,8 @@ public class ClutDecoder {
             clut.put(code, channelValues);
         }
 
+        bitStream.skipBytePadding();
+
         return new ClutInformation(codeLength, clut);
     }
 

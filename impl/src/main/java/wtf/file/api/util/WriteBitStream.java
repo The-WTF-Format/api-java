@@ -136,7 +136,7 @@ public class WriteBitStream {
         }
 
         // Now, write the bytes to wherever you need them
-        write(bytes);
+        write(bytes, bits);
     }
 
     public byte[] getBytes() {

@@ -33,80 +33,85 @@ public class ImageDataDecoder {
             for (int y = 0; y < headerInformation.height(); y++) {
                 for (int x = 0; x < headerInformation.width(); x++) {
                     if (!bitStream.hasRemaining(3)) {
-                        throw new WtfException(String.format("Missing pixel [%d;%d;%d]", frame, y, x));
+                        throw new WtfException(String.format("Missing pixel [%d;%d;%d]", frame, x, y));
                     }
 
                     byte typeFlag = bitStream.readBit(3);
 
                     PixelType pixelType = PixelType.fromFlag(typeFlag);
                     if (pixelType == null) {
-                        throw new WtfException(String.format("Unknown pixel type %X at [%d;%d;%d]", typeFlag, frame, y, x));
+                        throw new WtfException(String.format("Unknown pixel type %X at [%d;%d;%d]", typeFlag, frame, x, y));
                     }
 
-                    pixels[frame][y][x] =
-                            switch (pixelType) {
-                                case DIRECT_ENTRY -> {
-                                    if (!bitStream.hasRemaining(bitSize.colorEntry())) {
-                                        throw new WtfException(String.format("Pixel at [%d;%d;%d] is direct entry but has not enough data for every channel", frame, y, x));
-                                    }
-
-                                    Map<ColorChannel, Short> channelValues = readChannelMap(headerInformation, bitStream);
-
-                                    yield new DirectPixelInformation(frame, x, y, channelValues);
+                    pixels[frame][x][y] =
+                        switch (pixelType) {
+                            case DIRECT_ENTRY -> {
+                                if (!bitStream.hasRemaining(bitSize.colorEntry())) {
+                                    throw new WtfException(String.format("Pixel at [%d;%d;%d] is direct entry but has not enough data for every channel", frame, x, y));
                                 }
-                                case COPY_BY_LOCATION -> {
-                                    if (!bitStream.hasRemaining(bitSize.xReference() + bitSize.yReference())) {
-                                        throw new WtfException(String.format("Pixel at [%d;%d;%d] is reference entry but has not enough data for every reference", frame, y, x));
-                                    }
 
-                                    int xLocation = Math.toIntExact(bitStream.readNumber(bitSize.xReference()));
-                                    int yLocation = Math.toIntExact(bitStream.readNumber(bitSize.yReference()));
-                                    yield new ReferencePixelInformation(
-                                            frame, x, y, PixelType.COPY_BY_LOCATION,
-                                            0, xLocation, yLocation
-                                    );
-                                }
-                                case COPY_BY_FRAME -> {
-                                    if (!bitStream.hasRemaining(bitSize.frameReference())) {
-                                        throw new WtfException(String.format("Pixel at [%d;%d;%d] is reference entry but has not enough data for every reference", frame, y, x));
-                                    }
+                                Map<ColorChannel, Short> channelValues = readChannelMap(headerInformation, bitStream);
 
-                                    int frameLocation = Math.toIntExact(bitStream.readNumber(bitSize.frameReference()));
-                                    yield new ReferencePixelInformation(
-                                            frame, x, y, PixelType.COPY_BY_FRAME,
-                                            frameLocation, 0, 0
-                                    );
+                                yield new DirectPixelInformation(frame, x, y, channelValues);
+                            }
+                            case COPY_BY_LOCATION -> {
+                                if (!bitStream.hasRemaining(bitSize.xReference() + bitSize.yReference())) {
+                                    throw new WtfException(String.format("Pixel at [%d;%d;%d] is reference entry but has not enough data for every reference", frame, x, y));
                                 }
-                                case COPY_BY_FRAME_AND_LOCATION -> {
-                                    if (!bitStream.hasRemaining(bitSize.frameReference() + bitSize.xReference() + bitSize.yReference())) {
-                                        throw new WtfException(String.format("Pixel at [%d;%d;%d] is reference entry but has not enough data for every reference", frame, y, x));
-                                    }
 
-                                    int frameLocation = Math.toIntExact(bitStream.readNumber(bitSize.frameReference()));
-                                    int xLocation = Math.toIntExact(bitStream.readNumber(bitSize.xReference()));
-                                    int yLocation = Math.toIntExact(bitStream.readNumber(bitSize.yReference()));
-                                    yield new ReferencePixelInformation(
-                                            frame, x, y, PixelType.COPY_BY_FRAME_AND_LOCATION,
-                                            frameLocation, xLocation, yLocation
-                                    );
-                                }
-                                case COPY_PREVIOUS_LOCATION -> new ReferencePixelInformation(
-                                        frame, x, y, PixelType.COPY_PREVIOUS_LOCATION,
-                                        -2, -1, -1
+                                int xLocation = Math.toIntExact(bitStream.readNumber(bitSize.xReference()));
+                                int yLocation = Math.toIntExact(bitStream.readNumber(bitSize.yReference()));
+                                yield new ReferencePixelInformation(
+                                    frame, x, y, PixelType.COPY_BY_LOCATION,
+                                    0, xLocation, yLocation,
+                                    headerInformation.width()
                                 );
-                                case COPY_PREVIOUS_FRAME -> new ReferencePixelInformation(
-                                        frame, x, y, PixelType.COPY_PREVIOUS_FRAME,
-                                        -1, -2, -2
-                                );
-                                case CLUT_ENTRY -> {
-                                    if (!bitStream.hasRemaining(bitSize.clutCode())) {
-                                        throw new WtfException(String.format("Pixel at [%d;%d;%d] is clut entry but has not enough data for every clut entry", frame, y, x));
-                                    }
-
-                                    long clutCode = bitStream.readNumber(bitSize.clutCode());
-                                    yield new ClutEntryPixelInformation(frame, x, y, clutCode);
+                            }
+                            case COPY_BY_FRAME -> {
+                                if (!bitStream.hasRemaining(bitSize.frameReference())) {
+                                    throw new WtfException(String.format("Pixel at [%d;%d;%d] is reference entry but has not enough data for every reference", frame, x, y));
                                 }
-                            };
+
+                                int frameLocation = Math.toIntExact(bitStream.readNumber(bitSize.frameReference()));
+                                yield new ReferencePixelInformation(
+                                    frame, x, y, PixelType.COPY_BY_FRAME,
+                                    frameLocation, 0, 0,
+                                    headerInformation.width()
+                                );
+                            }
+                            case COPY_BY_FRAME_AND_LOCATION -> {
+                                if (!bitStream.hasRemaining(bitSize.frameReference() + bitSize.xReference() + bitSize.yReference())) {
+                                    throw new WtfException(String.format("Pixel at [%d;%d;%d] is reference entry but has not enough data for every reference", frame, x, y));
+                                }
+
+                                int frameLocation = Math.toIntExact(bitStream.readNumber(bitSize.frameReference()));
+                                int xLocation = Math.toIntExact(bitStream.readNumber(bitSize.xReference()));
+                                int yLocation = Math.toIntExact(bitStream.readNumber(bitSize.yReference()));
+                                yield new ReferencePixelInformation(
+                                    frame, x, y, PixelType.COPY_BY_FRAME_AND_LOCATION,
+                                    frameLocation, xLocation, yLocation,
+                                    headerInformation.width()
+                                );
+                            }
+                            case COPY_PREVIOUS_LOCATION -> new ReferencePixelInformation(
+                                frame, x, y, PixelType.COPY_PREVIOUS_LOCATION,
+                                -2, -1, -1,
+                                headerInformation.width()
+                            );
+                            case COPY_PREVIOUS_FRAME -> new ReferencePixelInformation(
+                                frame, x, y, PixelType.COPY_PREVIOUS_FRAME,
+                                -1, -2, -2,
+                                headerInformation.width()
+                            );
+                            case CLUT_ENTRY -> {
+                                if (!bitStream.hasRemaining(bitSize.clutCode())) {
+                                    throw new WtfException(String.format("Pixel at [%d;%d;%d] is clut entry but has not enough data for every clut entry", frame, x, y));
+                                }
+
+                                long clutCode = bitStream.readNumber(bitSize.clutCode());
+                                yield new ClutEntryPixelInformation(frame, x, y, clutCode);
+                            }
+                        };
                 }
             }
         }
@@ -119,9 +124,9 @@ public class ImageDataDecoder {
         for (ColorChannel channel : headerInformation.colorSpace().channels()) {
             switch (channel.type()) {
                 case FIXED ->
-                        channelValues.put(channel, (short) bitStream.readNumber(((FixedColorChannel) channel).bits()));
+                    channelValues.put(channel, (short) bitStream.readNumber(((FixedColorChannel) channel).bits()));
                 case DYNAMIC ->
-                        channelValues.put(channel, (short) bitStream.readNumber(headerInformation.channelWidth()));
+                    channelValues.put(channel, (short) bitStream.readNumber(headerInformation.channelWidth()));
             }
         }
         return channelValues;

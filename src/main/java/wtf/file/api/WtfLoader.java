@@ -25,7 +25,7 @@ public class WtfLoader {
      * @throws IOException if an I/O error occurs during the loading process
      * @see WtfImage
      */
-    public WtfImage from(Path path) throws WtfException, IOException {
+    public static WtfImage from(Path path) throws WtfException, IOException {
         byte[] bytes = Files.readAllBytes(path);
         return WtfDecoder.decode(bytes);
     }
@@ -36,7 +36,7 @@ public class WtfLoader {
      * @return a new instance of WtfImageBuilder, which provides methods to configure and build a WtfImage.
      * @see WtfImageBuilder
      */
-    public WtfImageBuilder by() {
+    public static WtfImageBuilder by() {
         return new WtfImageBuilderImpl();
     }
 

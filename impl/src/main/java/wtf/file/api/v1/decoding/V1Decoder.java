@@ -20,7 +20,7 @@ public class V1Decoder {
         var imageData = ImageDataDecoder.decode(headerInformation, clutInformation, bitStream);
         var dereferencedImageData = imageData.dereference(headerInformation.colorSpace(), headerInformation.channelWidth(), clutInformation);
 
-        return new WtfImageImpl(headerInformation, dereferencedImageData);
+        return new WtfImageImpl(headerInformation, metadataInformation, dereferencedImageData);
     }
 
 }

@@ -1,9 +1,8 @@
 package wtf.file.api.v1.encoding.metadata;
 
-import wtf.file.api.exception.NotYetImplementedException;
 import wtf.file.api.util.WriteBitStream;
 import wtf.file.api.v1.impl.editable.metadata.EditableMetadataContainerImpl;
-import java.nio.charset.StandardCharsets;
+
 import java.util.Map;
 
 public class MetadataEncoder {
@@ -16,9 +15,9 @@ public class MetadataEncoder {
             bitStream.writeAscii(key);
             bitStream.padToByte();
 
-            bitStream.write(value.getBytes(StandardCharsets.UTF_8));
+            bitStream.writeUtf8(value);
         }
 
-        bitStream.write((byte) 0x00);
+        bitStream.write((byte) 0);
     }
 }

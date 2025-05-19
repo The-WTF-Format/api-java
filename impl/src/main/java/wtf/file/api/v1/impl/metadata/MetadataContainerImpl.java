@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public class MetadataContainerImpl implements MetadataContainer {
-    private final Map<String, String> metadata;
+
+    protected final Map<String, String> metadata;
 
     public MetadataContainerImpl(Map<String, String> metadata) {
         this.metadata = metadata;
