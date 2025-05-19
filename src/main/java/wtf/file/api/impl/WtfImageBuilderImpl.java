@@ -14,6 +14,7 @@ import wtf.file.api.v1.impl.data.PixelImpl;
 import wtf.file.api.version.Version;
 
 import java.util.Arrays;
+import java.util.Map;
 
 public class WtfImageBuilderImpl implements WtfImageBuilder {
 
@@ -21,7 +22,7 @@ public class WtfImageBuilderImpl implements WtfImageBuilder {
     private int width;
     private int height;
     private ColorSpace colorSpace;
-    private short channelWidth = 8;
+    private int channelWidth = 8;
     private int frames = 1;
     private HeaderInformation.FrameCoding frameCoding;
     private int frameTimingValue = 0;
@@ -53,7 +54,7 @@ public class WtfImageBuilderImpl implements WtfImageBuilder {
     }
 
     @Override
-    public WtfImageBuilder channelWidth(short channelWidth) throws NumberOutOfBoundsException {
+    public WtfImageBuilder channelWidth(int channelWidth) throws NumberOutOfBoundsException {
         NumberUtil.checkBounds(channelWidth, 1, 16, "channelWidth");
         this.channelWidth = channelWidth;
         return this;
@@ -112,6 +113,7 @@ public class WtfImageBuilderImpl implements WtfImageBuilder {
                         this.colorSpace, this.channelWidth,
                         this.frames, this.frameCoding, this.frameTimingValue
                     ),
+                    Map.of(),
                     pixels
                 );
             }

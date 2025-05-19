@@ -9,11 +9,13 @@ import wtf.file.api.editable.data.EditablePixel;
 import wtf.file.api.editable.metadata.EditableMetadataContainer;
 import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.exception.WtfException;
+import wtf.file.api.metadata.MetadataContainer;
 import wtf.file.api.util.NumberUtil;
 import wtf.file.api.v1.decoding.header.HeaderInformation;
 import wtf.file.api.v1.encoding.V1Encoder;
 import wtf.file.api.v1.impl.animation.AnimationInformationImpl;
 import wtf.file.api.v1.impl.editable.animation.EditableAnimationInformationImpl;
+import wtf.file.api.v1.impl.editable.metadata.EditableMetadataContainerImpl;
 import wtf.file.api.version.Version;
 
 import java.awt.*;
@@ -28,20 +30,22 @@ public class EditableWtfImageImpl implements EditableWtfImage {
     private int height;
     private ColorSpace colorSpace;
     private int channelWidth;
-    private final EditableAnimationInformation editableAnimationInformation;
+    private final EditableAnimationInformation animationInformation;
+    private final EditableMetadataContainer metadataContainer;
 
-    public EditableWtfImageImpl(int width, int height, ColorSpace colorSpace, int channelWidth, AnimationInformation animationInformation) {
+    public EditableWtfImageImpl(int width, int height, ColorSpace colorSpace, int channelWidth, AnimationInformation animationInformation, MetadataContainer metadataContainer) {
         this.width = width;
         this.height = height;
         this.colorSpace = colorSpace;
         this.channelWidth = channelWidth;
-        this.editableAnimationInformation = new EditableAnimationInformationImpl(
+        this.animationInformation = new EditableAnimationInformationImpl(
             animationInformation.frames(),
             animationInformation.isFpsCoded() ? HeaderInformation.FrameCoding.FPS_CODED : HeaderInformation.FrameCoding.SPF_CODED,
             animationInformation.isFpsCoded() ? animationInformation.framesPerSecond() : animationInformation.secondsPerFrame(),
             colorSpace, channelWidth,
             ((AnimationInformationImpl) animationInformation).data()
         );
+        this.metadataContainer = new EditableMetadataContainerImpl(metadataContainer.asMap());
     }
 
     @Override
@@ -101,12 +105,12 @@ public class EditableWtfImageImpl implements EditableWtfImage {
 
     @Override
     public EditableAnimationInformation animationInformation() {
-        return this.editableAnimationInformation;
+        return this.animationInformation;
     }
 
     @Override
     public EditableMetadataContainer metadataContainer() {
-        return null;
+        return this.metadataContainer;
     }
 
     @Override

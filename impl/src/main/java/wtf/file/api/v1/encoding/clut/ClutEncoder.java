@@ -26,6 +26,7 @@ public class ClutEncoder {
             long clutCode = clutEntry.getKey();
             Map<ColorChannel, Short> colorEntry = clutEntry.getValue();
 
+            bitStream.writeNumber(clutCode, codeLength);
             ImageDataEncoder.writeChannelValues(colorEntry, colorSpace, channelWidth, bitStream);
         }
 

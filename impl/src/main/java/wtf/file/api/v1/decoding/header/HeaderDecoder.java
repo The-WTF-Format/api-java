@@ -14,7 +14,7 @@ public class HeaderDecoder {
         int width = Math.toIntExact(bitStream.readNumber(16));
 
         byte colorSpaceByte = bitStream.readByte();
-        ColorSpace colorSpace = ColorSpaceUtil.colorSpaceMap().get(bitStream.readByte());
+        ColorSpace colorSpace = ColorSpaceUtil.colorSpaceMap().get(colorSpaceByte);
         if (colorSpace == null) {
             throw new WtfException(String.format("Unknown color space %X", colorSpaceByte));
         }

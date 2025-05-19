@@ -79,7 +79,7 @@ public interface WtfImageBuilder {
      * @throws NumberOutOfBoundsException if the provided channelWidth value is out of the acceptable range (1-255)
      */
     @Contract(value = "_ -> this", mutates = "this")
-    WtfImageBuilder channelWidth(short channelWidth) throws NumberOutOfBoundsException;
+    WtfImageBuilder channelWidth(int channelWidth) throws NumberOutOfBoundsException;
 
     /**
      * Sets the number of frames for the WtfImage being built.

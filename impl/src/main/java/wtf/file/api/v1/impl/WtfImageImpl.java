@@ -10,9 +10,11 @@ import wtf.file.api.metadata.MetadataContainer;
 import wtf.file.api.v1.decoding.header.HeaderInformation;
 import wtf.file.api.v1.impl.animation.AnimationInformationImpl;
 import wtf.file.api.v1.impl.editable.EditableWtfImageImpl;
+import wtf.file.api.v1.impl.metadata.MetadataContainerImpl;
 import wtf.file.api.version.Version;
 
 import java.awt.*;
+import java.util.Map;
 
 public class WtfImageImpl implements WtfImage {
 
@@ -21,13 +23,15 @@ public class WtfImageImpl implements WtfImage {
     private final ColorSpace colorSpace;
     private final int channelWidth;
     private final AnimationInformation animationInformation;
+    private final MetadataContainer metadataContainer;
 
-    public WtfImageImpl(HeaderInformation headerInformation, Pixel[][][] pixels) {
+    public WtfImageImpl(HeaderInformation headerInformation, Map<String, String> metadata, Pixel[][][] pixels) {
         this.width = headerInformation.width();
         this.height = headerInformation.height();
         this.colorSpace = headerInformation.colorSpace();
         this.channelWidth = headerInformation.channelWidth();
         this.animationInformation = new AnimationInformationImpl(headerInformation, pixels);
+        this.metadataContainer = new MetadataContainerImpl(metadata);
     }
 
     @Override
@@ -62,7 +66,7 @@ public class WtfImageImpl implements WtfImage {
 
     @Override
     public MetadataContainer metadataContainer() {
-        return null;
+        return this.metadataContainer;
     }
 
     @Override
@@ -70,7 +74,8 @@ public class WtfImageImpl implements WtfImage {
         return new EditableWtfImageImpl(
             this.width, this.height,
             this.colorSpace, this.channelWidth,
-            this.animationInformation
+            this.animationInformation,
+            this.metadataContainer
         );
     }
 

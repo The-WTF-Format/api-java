@@ -31,4 +31,8 @@ public abstract class PixelInformation {
 
     public abstract Map<ColorChannel, Short> pixel(ClutInformation clutInformation, PixelInformation[][][] pixelInformation, ArrayList<PixelInformation> visited) throws WtfException;
 
+    @Override
+    public String toString() {
+        return String.format("[%d;%d;%d: %s]", frame, x, y, type);
+    }
 }
