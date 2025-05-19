@@ -7,6 +7,7 @@ import wtf.file.api.editable.compression.DataCompressionType;
 import wtf.file.api.editable.data.EditableFrame;
 import wtf.file.api.editable.metadata.EditableMetadataContainer;
 import wtf.file.api.exception.NumberOutOfBoundsException;
+import wtf.file.api.exception.WtfException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -28,7 +29,7 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
 
     /**
      * Sets the width of the editable image.
-     * The specified width must be within valid bounds for the image dimensions (0 - 65 535).
+     * The specified width must be within valid bounds for the image dimensions (0-65 535).
      * <p>
      * If the image gets bigger by this, every new pixel will have the default color of this image's color space.
      * If the image gets smaller, data is truncated from the right of the image.
@@ -41,7 +42,7 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
 
     /**
      * Sets the height of the editable image.
-     * The specified height must be within valid bounds for the image dimensions (0 - 65 535).
+     * The specified height must be within valid bounds for the image dimensions (0-65 535).
      * <p>
      * If the image gets larger due to this operation, new rows of pixels will have the default color of this image's color space.
      * If the image gets smaller, data is truncated from the bottom of the image.
@@ -72,7 +73,7 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
      * Sets the channel width of the editable image.
      * The channel width specifies the bit depth per channel, determining the amount
      * of information stored per individual color channel (e.g., red, green, blue) or alpha channel.
-     * The value must be within valid bounds for the channel width (1 - 8).
+     * The value must be within valid bounds for the channel width (1-8).
      * <p>
      * The api tries to represent the color as best as possible in the new channel width.
      *
@@ -88,13 +89,26 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
     EditableMetadataContainer metadataContainer();
 
     /**
+     * Returns the current instance of {@code EditableWtfImage}.
+     * This method is used as a default implementation for editing or modifying
+     * the current editable image.
+     *
+     * @return the current instance of {@code EditableWtfImage}
+     */
+    @Override
+    default EditableWtfImage edit() {
+        return this;
+    }
+
+    /**
      * Saves the current editable image to the specified file path using the provided compression settings.
      *
      * @param path the file path where the image will be saved; must not be null
      * @param dataCompressionType the type of compression applied to the image data; must not be null
      * @throws IOException if an I/O error occurs during the save operation
+     * @throws WtfException if an error occurs encoding the image data
      */
-    void save(Path path, DataCompressionType dataCompressionType) throws IOException;
+    void save(Path path, DataCompressionType dataCompressionType) throws IOException, WtfException;
 
     /**
      * Saves the current editable image to the specified file path using default compression settings.
@@ -102,8 +116,9 @@ public interface EditableWtfImage extends WtfImage, EditableFrame {
      *
      * @param path the file path where the image will be saved; must not be null
      * @throws IOException if an I/O error occurs during the save operation
+     * @throws WtfException if an error occurs encoding the image data
      */
-    default void save(Path path) throws IOException {
+    default void save(Path path) throws IOException, WtfException {
         save(path, DataCompressionType.MAPPED_COMPRESSION);
     }
 

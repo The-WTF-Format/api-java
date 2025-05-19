@@ -2,6 +2,7 @@ package wtf.file.api.data;
 
 import wtf.file.api.color.ColorSpace;
 import wtf.file.api.color.channel.ColorChannel;
+import wtf.file.api.exception.NumberOutOfBoundsException;
 
 import java.util.Map;
 
@@ -46,6 +47,16 @@ public interface Pixel {
      * @param colorSpace the target {@link ColorSpace}.
      * @return a new {@code Pixel} in the specified color space, or null if it could not be converted.
      */
-    Pixel as(ColorSpace colorSpace);
+    Pixel withColorSpace(ColorSpace colorSpace);
+
+    /**
+     * Creates a new {@code Pixel} instance with the specified channel width.
+     *
+     * @param channelWidth the width of each channel, typically in bits (e.g., 8 for 0-255 values).
+     *                     Must be a positive, non-zero integer smaller than or equal to 16
+     * @return a new {@code Pixel} instance with the given channel width set.
+     * @throws NumberOutOfBoundsException if the channel width is invalid.
+     */
+    Pixel withWidth(int channelWidth) throws NumberOutOfBoundsException;
 
 }

@@ -9,6 +9,7 @@ import wtf.file.api.exception.NumberOutOfBoundsException;
 import wtf.file.api.metadata.MetadataContainer;
 import wtf.file.api.v1.decoding.header.HeaderInformation;
 import wtf.file.api.v1.impl.animation.AnimationInformationImpl;
+import wtf.file.api.v1.impl.editable.EditableWtfImageImpl;
 import wtf.file.api.version.Version;
 
 import java.awt.*;
@@ -21,12 +22,12 @@ public class WtfImageImpl implements WtfImage {
     private final int channelWidth;
     private final AnimationInformation animationInformation;
 
-    public WtfImageImpl(HeaderInformation headerInformation) {
+    public WtfImageImpl(HeaderInformation headerInformation, Pixel[][][] pixels) {
         this.width = headerInformation.width();
         this.height = headerInformation.height();
         this.colorSpace = headerInformation.colorSpace();
         this.channelWidth = headerInformation.channelWidth();
-        this.animationInformation = new AnimationInformationImpl(headerInformation);
+        this.animationInformation = new AnimationInformationImpl(headerInformation, pixels);
     }
 
     @Override
@@ -66,22 +67,26 @@ public class WtfImageImpl implements WtfImage {
 
     @Override
     public EditableWtfImage edit() {
-        return null;
+        return new EditableWtfImageImpl(
+            this.width, this.height,
+            this.colorSpace, this.channelWidth,
+            this.animationInformation
+        );
     }
 
     @Override
     public Pixel[][] pixels() {
-        return new Pixel[0][];
+        return this.animationInformation().frame(0).pixels();
     }
 
     @Override
     public Pixel at(int x, int y) throws NumberOutOfBoundsException {
-        return null;
+        return this.animationInformation().frame(0).at(x, y);
     }
 
     @Override
     public Image asJavaImage() {
-        return null;
+        return this.animationInformation.frame(0).asJavaImage();
     }
 
 }

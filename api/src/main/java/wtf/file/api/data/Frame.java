@@ -1,5 +1,6 @@
 package wtf.file.api.data;
 
+import wtf.file.api.color.ColorSpace;
 import wtf.file.api.exception.NumberOutOfBoundsException;
 
 import java.awt.*;
@@ -32,6 +33,9 @@ public interface Frame {
 
     /**
      * Converts the frame into a standard Java {@link Image} object.
+     * For this every pixel gets transformed into a {@link ColorSpace#RGB} pixel}, {@link ColorSpace#RGBa}
+     * or {@link ColorSpace#DYNAMIC_RGBa} with a channel width of 8 bits (0-255 values).
+     * Thus information may get lost.
      *
      * @return the {@link Image} representation of this frame.
      */

@@ -18,9 +18,9 @@ public class V1Decoder {
         var clutInformation = ClutDecoder.decode(bitStream);
         var metadataInformation = MetadataDecoder.decode(bitStream);
         var imageData = ImageDataDecoder.decode(headerInformation, clutInformation, bitStream);
-        var dereferencedImageData = imageData.dereference(headerInformation.colorSpace(), clutInformation);
+        var dereferencedImageData = imageData.dereference(headerInformation.colorSpace(), headerInformation.channelWidth(), clutInformation);
 
-        return new WtfImageImpl(headerInformation);
+        return new WtfImageImpl(headerInformation, dereferencedImageData);
     }
 
 }

@@ -15,13 +15,13 @@ public record ImageData(
     Map<Integer, Map<ColorChannel, Short>> clutEntries
 ) {
 
-    public Pixel[][][] dereference(ColorSpace colorSpace, ClutInformation clutInformation) throws WtfException {
+    public Pixel[][][] dereference(ColorSpace colorSpace, int channelWidth, ClutInformation clutInformation) throws WtfException {
         Pixel[][][] dereferencedPixels = new Pixel[pixels.length][pixels[0].length][pixels[0][0].length];
 
         for (int frame = 0; frame < pixels.length; frame++) {
             for (int x = 0; x < pixels[frame].length; x++) {
                 for (int y = 0; y < pixels[frame][x].length; y++) {
-                    dereferencedPixels[frame][x][y] = new PixelImpl(colorSpace, pixels[frame][x][y].pixel(clutInformation, pixels));
+                    dereferencedPixels[frame][x][y] = new PixelImpl(pixels[frame][x][y].pixel(clutInformation, pixels), colorSpace, channelWidth);
                 }
             }
         }

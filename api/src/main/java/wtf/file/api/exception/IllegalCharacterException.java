@@ -8,9 +8,6 @@ package wtf.file.api.exception;
  */
 public class IllegalCharacterException extends RuntimeException {
 
-    private final char charcter;
-    private final String allowed;
-
     /**
      * Constructs a new {@code IllegalCharacterException} with the specified illegal character
      * and a description of allowed characters.
@@ -20,8 +17,6 @@ public class IllegalCharacterException extends RuntimeException {
      */
     public IllegalCharacterException(char character, String allowed) {
         super("Illegal character: " + character + ". Allowed: " + allowed);
-        this.charcter = character;
-        this.allowed = allowed;
     }
 
 }
