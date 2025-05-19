@@ -23,7 +23,7 @@ public class V1Encoder {
 
         ImageData imageData = ImageDataEncoder.asImageData(image, compressionType);
         HeaderEncoder.encode(image, bitStream);
-        int length = ClutEncoder.encode(imageData, bitStream);
+        int length = ClutEncoder.encode(image.colorSpace(), image.channelWidth(), imageData, bitStream);
         MetadataEncoder.encode((EditableMetadataContainerImpl) image.metadataContainer(), bitStream);
         ImageDataEncoder.encode(image.colorSpace(), BitSize.of(
             image.channelWidth(), image.colorSpace(),

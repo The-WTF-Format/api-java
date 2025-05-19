@@ -12,7 +12,7 @@ import java.util.Map;
 
 public record ImageData(
     PixelInformation[][][] pixels,
-    Map<Integer, Map<ColorChannel, Short>> clutEntries
+    Map<Long, Map<ColorChannel, Short>> clutEntries
 ) {
 
     public Pixel[][][] dereference(ColorSpace colorSpace, int channelWidth, ClutInformation clutInformation) throws WtfException {
