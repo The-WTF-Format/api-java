@@ -14,13 +14,9 @@ public class MetadataEncoder {
             String value = entry.getValue();
 
             bitStream.writeAscii(key);
-
-            bitStream.write((byte) 0x00);
             bitStream.padToByte();
 
             bitStream.write(value.getBytes(StandardCharsets.UTF_8));
-
-            bitStream.writeUtf8(value);
         }
 
         bitStream.write((byte) 0x00);

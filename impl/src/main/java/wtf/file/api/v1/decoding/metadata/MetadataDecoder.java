@@ -16,8 +16,7 @@ public class MetadataDecoder {
 
         String key;
         String value;
-
-        while(bitStream.hasRemaining(8) && !Arrays.equals(bitStream.peekBytes(1), nulChar)) {
+        while(true) {
             key = bitStream.readAscii();
 
             if (key.length() == 0) {
