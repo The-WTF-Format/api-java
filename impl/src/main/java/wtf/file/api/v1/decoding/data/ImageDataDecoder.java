@@ -50,15 +50,7 @@ public class ImageDataDecoder {
                                         throw new WtfException(String.format("Pixel at [%d;%d;%d] is direct entry but has not enough data for every channel", frame, y, x));
                                     }
 
-                                    Map<ColorChannel, Short> channelValues = new HashMap<>();
-                                    for (ColorChannel channel : headerInformation.colorSpace().channels()) {
-                                        switch (channel.type()) {
-                                            case FIXED ->
-                                                    channelValues.put(channel, (short) bitStream.readNumber(((FixedColorChannel) channel).bits()));
-                                            case DYNAMIC ->
-                                                    channelValues.put(channel, (short) bitStream.readNumber(headerInformation.channelWidth()));
-                                        }
-                                    }
+                                    Map<ColorChannel, Short> channelValues = readChannelMap(headerInformation, bitStream);
 
                                     yield new DirectPixelInformation(frame, x, y, channelValues);
                                 }
@@ -120,6 +112,19 @@ public class ImageDataDecoder {
         }
 
         return new ImageData(pixels, null);
+    }
+
+    public static Map<ColorChannel, Short> readChannelMap(HeaderInformation headerInformation, ReadBitStream bitStream) throws WtfException {
+        Map<ColorChannel, Short> channelValues = new HashMap<>();
+        for (ColorChannel channel : headerInformation.colorSpace().channels()) {
+            switch (channel.type()) {
+                case FIXED ->
+                        channelValues.put(channel, (short) bitStream.readNumber(((FixedColorChannel) channel).bits()));
+                case DYNAMIC ->
+                        channelValues.put(channel, (short) bitStream.readNumber(headerInformation.channelWidth()));
+            }
+        }
+        return channelValues;
     }
 
 }

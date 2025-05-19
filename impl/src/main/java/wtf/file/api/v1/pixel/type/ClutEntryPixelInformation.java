@@ -4,12 +4,11 @@ import wtf.file.api.color.channel.ColorChannel;
 import wtf.file.api.v1.decoding.clut.ClutInformation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ClutEntryPixelInformation extends PixelInformation {
 
-    private final int clutCode;
+    private final long clutCode;
     private final long code;
 
     public ClutEntryPixelInformation(int frame, int x, int y, long clutCode, long code) {
@@ -22,7 +21,7 @@ public class ClutEntryPixelInformation extends PixelInformation {
         this(frame, x, y, clutCode, 0);
     }
 
-    public int clutCode() {
+    public long clutCode() {
         return this.clutCode;
     }
 
@@ -32,11 +31,6 @@ public class ClutEntryPixelInformation extends PixelInformation {
 
     @Override
     public Map<ColorChannel, Short> pixel(ClutInformation clutInformation, PixelInformation[][][] pixelInformation, ArrayList<PixelInformation> visited) {
-        Map<ColorChannel, Integer> clutEntry = clutInformation.clut().get(this.clutCode);
-        Map<ColorChannel, Short> pixelData = new HashMap<>();
-
-        clutEntry.forEach((channel, value) -> pixelData.put(channel, value.shortValue()));
-
-        return pixelData;
+        return clutInformation.clut().get(this.clutCode);
     }
 }

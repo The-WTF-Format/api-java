@@ -5,8 +5,8 @@ import wtf.file.api.color.channel.ColorChannel;
 import java.util.Map;
 
 public record ClutInformation(
-        byte codeLength,
-        Map<Integer, Map<ColorChannel, Integer>> clut
+        int codeLength,
+        Map<Long, Map<ColorChannel, Short>> clut
 ) {
 
 }

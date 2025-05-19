@@ -13,4 +13,8 @@ public class NumberUtil {
     public static int getMaxValue(int channelWidth) {
         return (int) Math.pow(2, channelWidth) - 1;
     }
+
+    public static int getChannelWidth(long maxValue) {
+        return (int) Math.ceil(Math.log(maxValue + 1) / Math.log(2));
+    }
 }

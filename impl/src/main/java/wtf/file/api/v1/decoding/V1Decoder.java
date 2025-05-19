@@ -15,7 +15,7 @@ public class V1Decoder {
     @NotNull
     public static WtfImage decode(ReadBitStream bitStream) throws WtfException {
         var headerInformation = HeaderDecoder.decode(bitStream);
-        var clutInformation = ClutDecoder.decode(bitStream);
+        var clutInformation = ClutDecoder.decode(headerInformation, bitStream);
         var metadataInformation = MetadataDecoder.decode(bitStream);
         var imageData = ImageDataDecoder.decode(headerInformation, clutInformation, bitStream);
         var dereferencedImageData = imageData.dereference(headerInformation.colorSpace(), headerInformation.channelWidth(), clutInformation);

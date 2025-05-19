@@ -9,20 +9,22 @@ import wtf.file.api.color.channel.FixedColorChannel;
 import wtf.file.api.editable.compression.DataCompressionType;
 import wtf.file.api.exception.WtfException;
 import wtf.file.api.util.WriteBitStream;
+import wtf.file.api.v1.impl.editable.EditableWtfImageImpl;
 import wtf.file.api.v1.pixel.BitSize;
 import wtf.file.api.v1.pixel.ImageData;
-import wtf.file.api.v1.impl.editable.EditableWtfImageImpl;
 import wtf.file.api.v1.pixel.type.*;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class ImageDataEncoder {
 
     @NotNull
     public static ImageData asImageData(EditableWtfImageImpl image, DataCompressionType compressionType) throws WtfException {
         Map<Long, Integer> colorOccurrences = new HashMap<>();
-        Map<Integer, Map<ColorChannel, Short>> clutEntries = new HashMap<>();
+        Map<Long, Map<ColorChannel, Short>> clutEntries = new HashMap<>();
 
         PixelInformation[][][] pixels = new PixelInformation[image.animationInformation().frames()][image.height()][image.width()];
         for (int frame = 0; frame < image.animationInformation().frames(); frame++) {
@@ -36,8 +38,8 @@ public class ImageDataEncoder {
 
         // apply mapped/clut compression
         if (compressionType.useClut()) {
-            Map<Long, Integer> clutCodes = new HashMap<>();
-            AtomicInteger clutIndex = new AtomicInteger(1);
+            Map<Long, Long> clutCodes = new HashMap<>();
+            AtomicLong clutIndex = new AtomicLong(1L);
             colorOccurrences.entrySet().stream()
                 .filter((entry) -> entry.getValue() > 5)
                 .forEach((entry) -> clutCodes.put(entry.getKey(), clutIndex.getAndIncrement()));
@@ -47,7 +49,7 @@ public class ImageDataEncoder {
                     for (int x = 0; x < image.width(); x++) {
                         DirectPixelInformation pixelInformation = (DirectPixelInformation) pixels[frame][x][y];
                         if (clutCodes.containsKey(pixelInformation.code())) {
-                            int clutCode = clutCodes.get(pixelInformation.code());
+                            long clutCode = clutCodes.get(pixelInformation.code());
                             pixels[frame][x][y] = new ClutEntryPixelInformation(frame, x, y, clutCode);
 
                             if (!clutEntries.containsKey(clutCode)) {
@@ -151,14 +153,7 @@ public class ImageDataEncoder {
                     switch (pixel.type()) {
                         case DIRECT_ENTRY -> {
                             Map<ColorChannel, Short> channelValues = ((DirectPixelInformation) pixel).channelValues();
-                            for (ColorChannel channel : colorSpace.channels()) {
-                                short value = channelValues.get(channel);
-
-                                switch (channel.type()) {
-                                    case FIXED -> bitStream.writeNumber(value, ((FixedColorChannel) channel).bits());
-                                    case DYNAMIC -> bitStream.writeNumber(value, bitSize.channelWidth());
-                                }
-                            }
+                            writeChannelValues(channelValues, colorSpace, bitSize.channelWidth(), bitStream);
                         }
                         case COPY_BY_LOCATION, COPY_BY_FRAME, COPY_BY_FRAME_AND_LOCATION -> {
                             ReferencePixelInformation pixelInformation = (ReferencePixelInformation) pixel;
@@ -176,11 +171,22 @@ public class ImageDataEncoder {
                             }
                         }
                         case CLUT_ENTRY -> {
-                            int clutCode = ((ClutEntryPixelInformation) pixel).clutCode();
+                            long clutCode = ((ClutEntryPixelInformation) pixel).clutCode();
                             bitStream.writeNumber(clutCode, bitSize.clutCode());
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public static void writeChannelValues(Map<ColorChannel, Short> channelValues, ColorSpace colorSpace, int channelWidth, WriteBitStream bitStream) throws WtfException {
+        for (ColorChannel channel : colorSpace.channels()) {
+            short value = channelValues.get(channel);
+
+            switch (channel.type()) {
+                case FIXED -> bitStream.writeNumber(value, ((FixedColorChannel) channel).bits());
+                case DYNAMIC -> bitStream.writeNumber(value, channelWidth);
             }
         }
     }
