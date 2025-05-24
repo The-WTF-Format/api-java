@@ -8,7 +8,7 @@ allprojects {
     apply(plugin = "java-library")
 
     group = "wtf.file"
-    version = "1.0-SNAPSHOT"
+    version = "1.1"
 
     repositories {
         mavenCentral()
@@ -16,6 +16,10 @@ allprojects {
 }
 
 tasks.jar {
+    subprojects.forEach { sub ->
+        dependsOn(sub.tasks.jar)
+    }
+
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
 }
