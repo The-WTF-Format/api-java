@@ -18,12 +18,12 @@ import java.util.Map;
 
 public class WtfImageBuilderImpl implements WtfImageBuilder {
 
-    private Version version = Version.VERSION_1;
+    private Version version = DEFAULT_VERSION;
     private int width;
     private int height;
     private ColorSpace colorSpace;
-    private int channelWidth = 8;
-    private int frames = 1;
+    private int channelWidth = DEFAULT_CHANNEL_WIDTH;
+    private int frames = DEFAULT_FRAMES;
     private HeaderInformation.FrameCoding frameCoding;
     private int frameTimingValue = 0;
 

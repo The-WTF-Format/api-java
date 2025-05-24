@@ -24,6 +24,19 @@ import wtf.file.api.version.Version;
 public interface WtfImageBuilder {
 
     /**
+     * The default version used in the {@code WtfImageBuilder} when no specific version is provided.
+     * Defaults to {@code VERSION_1}.
+     *
+     * <p>
+     *     This version determines the structure and compatibility of the {@code WtfImage} being built.
+     * </p>
+     *
+     * @see Version#VERSION_1
+     * @since 1.1
+     */
+    Version DEFAULT_VERSION = Version.VERSION_1;
+
+    /**
      * Sets the version for the WtfImage being built.
      * Per default the version is set to {@code VERSION_1}
      *
@@ -33,7 +46,6 @@ public interface WtfImageBuilder {
      */
     @Contract(value = "_ -> this", mutates = "this")
     WtfImageBuilder version(Version version);
-
 
     /**
      * Sets the width of the WtfImage being built.
@@ -70,6 +82,19 @@ public interface WtfImageBuilder {
     WtfImageBuilder colorSpace(ColorSpace colorSpace);
 
     /**
+     * The default channel width for the WtfImage being built, measured in bits.
+     * This value specifies the bit depth for each channel in the color space
+     * and is set to 8 by default.
+     * <p>
+     *     It represents the typical bit depth used for most images, ensuring a balance
+     *     between image quality and memory usage.
+     * </p>
+     *
+     * @since 1.1
+     */
+    int DEFAULT_CHANNEL_WIDTH = 8;
+
+    /**
      * Sets the channel width for the WtfImage being built.
      * This value represents the bit depth of each channel in the color space.
      * Per default the channel width is set to {@code 8}
@@ -80,6 +105,16 @@ public interface WtfImageBuilder {
      */
     @Contract(value = "_ -> this", mutates = "this")
     WtfImageBuilder channelWidth(int channelWidth) throws NumberOutOfBoundsException;
+
+    /**
+     * The default number of frames for a WtfImage animation.
+     * This value is used when no specific frame count is set by the user.
+     * The default value is {@code 1}.
+     *
+     * @see WtfImageBuilder#frames(int)
+     * @since 1.1
+     */
+    int DEFAULT_FRAMES = 1;
 
     /**
      * Sets the number of frames for the WtfImage being built.
