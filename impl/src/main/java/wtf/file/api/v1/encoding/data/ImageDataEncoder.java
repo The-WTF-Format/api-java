@@ -178,6 +178,8 @@ public class ImageDataEncoder {
                 }
             }
         }
+
+        bitStream.padToByte();
     }
 
     public static void writeChannelValues(Map<ColorChannel, Short> channelValues, ColorSpace colorSpace, int channelWidth, WriteBitStream bitStream) throws WtfException {
