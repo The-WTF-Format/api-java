@@ -26,7 +26,7 @@ public class ImageDataEncoder {
         Map<Long, Integer> colorOccurrences = new HashMap<>();
         Map<Long, Map<ColorChannel, Short>> clutEntries = new HashMap<>();
 
-        PixelInformation[][][] pixels = new PixelInformation[image.animationInformation().frames()][image.height()][image.width()];
+        PixelInformation[][][] pixels = new PixelInformation[image.animationInformation().frames()][image.width()][image.height()];
         for (int frame = 0; frame < image.animationInformation().frames(); frame++) {
             for (int y = 0; y < image.height(); y++) {
                 for (int x = 0; x < image.width(); x++) {
@@ -94,6 +94,7 @@ public class ImageDataEncoder {
 
                             if (previousFrame != previousLocation) {
                                 bestReference = reference;
+                                bestEntry = BestReferenceType.PREVIOUS;
                                 break;
                             }
 
@@ -115,23 +116,17 @@ public class ImageDataEncoder {
                             }
                         }
 
-                        if (bestReference != null) {
-                            //noinspection DuplicatedCode
-                            boolean previousFrame = bestReference[0] == frame - 1 && bestReference[1] == x && bestReference[2] == y;
-                            boolean previousLocation = bestReference[0] == frame && bestReference[1] == previousX && bestReference[2] == previousY;
-                            boolean sameFrame = bestReference[0] == frame;
-                            boolean sameLocation = bestReference[1] == x && bestReference[2] == y;
-
-                            if (previousFrame) {
-                                pixels[frame][x][y] = new ReferencePixelInformation(frame, x, y, PixelType.COPY_PREVIOUS_FRAME, -1, -2, -2, image.width());
-                            } else if (previousLocation) {
-                                pixels[frame][x][y] = new ReferencePixelInformation(frame, x, y, PixelType.COPY_PREVIOUS_LOCATION, -2, -1, -1, image.width());
-                            } else if (sameFrame) {
-                                pixels[frame][x][y] = new ReferencePixelInformation(frame, x, y, PixelType.COPY_BY_LOCATION, -2, bestReference[1], bestReference[2], image.width());
-                            } else if (sameLocation) {
-                                pixels[frame][x][y] = new ReferencePixelInformation(frame, x, y, PixelType.COPY_BY_FRAME, bestReference[0], -2, -2, image.width());
-                            } else {
-                                pixels[frame][x][y] = new ReferencePixelInformation(frame, x, y, PixelType.COPY_BY_FRAME_AND_LOCATION, bestReference[0], bestReference[1], bestReference[2], image.width());
+                        switch (bestEntry) {
+                            case FULL ->
+                                pixels[frame][x][y] = new ReferencePixelInformation(frame, x, y, PixelType.COPY_BY_FRAME_AND_LOCATION, bestReference[0], bestReference[1], bestReference[2]);
+                            case FRAME_SAME -> pixels[frame][x][y] = new ReferencePixelInformation(frame, x, y, PixelType.COPY_BY_LOCATION, -2, bestReference[1], bestReference[2]);
+                            case LOCATION_SAME -> pixels[frame][x][y] = new ReferencePixelInformation(frame, x, y, PixelType.COPY_BY_FRAME, bestReference[0], -2, -2);
+                            case PREVIOUS -> {
+                                if (bestReference[0] == frame - 1) {
+                                  pixels[frame][x][y] = new ReferencePixelInformation(frame, x, y, PixelType.COPY_PREVIOUS_FRAME, -1, -2, -2);
+                                } else {
+                                    pixels[frame][x][y] = new ReferencePixelInformation(frame, x, y, PixelType.COPY_PREVIOUS_LOCATION, -2, -1, -1);
+                                }
                             }
                         }
 

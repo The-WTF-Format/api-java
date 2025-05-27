@@ -16,6 +16,14 @@ public class ReferencePixelInformation extends PixelInformation {
 
     private Map<ColorChannel, Short> knowData = null;
 
+    public ReferencePixelInformation(int frame, int x, int y, PixelType type, int frameReference, int xReference, int yReference) throws WtfException {
+        super(frame, x, y, type);
+
+        this.frameReference = frameReference;
+        this.xReference = xReference;
+        this.yReference = yReference;
+    }
+
     public ReferencePixelInformation(int frame, int x, int y, PixelType type, int frameReference, int xReference, int yReference, int width) throws WtfException {
         super(frame, x, y, type);
 
