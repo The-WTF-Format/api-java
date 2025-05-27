@@ -48,7 +48,11 @@ public class HSVTransformer implements Transformer{
             bp = x;
         }
 
-        return Map.of(RED, (short) ((rp + m) * maxValue) , GREEN, (short) ((gp + m) * maxValue), BLUE, (short) ((bp + m) * maxValue));
+        return Map.of(
+            RED, (short) Math.max(0, Math.min(maxValue, (rp + m) * maxValue)),
+            GREEN, (short) Math.max(0, Math.min(maxValue, (gp + m) * maxValue)),
+            BLUE, (short) Math.max(0, Math.min(maxValue, (bp + m) * maxValue))
+        );
     }
 
     @Override
