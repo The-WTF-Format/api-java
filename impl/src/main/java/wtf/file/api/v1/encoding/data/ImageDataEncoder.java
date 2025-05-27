@@ -145,7 +145,16 @@ public class ImageDataEncoder {
     }
 
     public static void encode(ColorSpace colorSpace, BitSize bitSize, ImageData data, WriteBitStream bitStream) throws WtfException {
-        for (PixelInformation[][] frame : data.pixels()) {
+        PixelInformation[][][] rowColumnSwitched = new PixelInformation[data.pixels().length][data.pixels()[0][0].length][data.pixels()[0].length];
+        for (int frameIndex = 0; frameIndex < data.pixels().length; frameIndex++) {
+            for (int xIndex = 0; xIndex < data.pixels()[frameIndex].length; xIndex++) {
+                for (int yIndex = 0; yIndex < data.pixels()[frameIndex][xIndex].length; yIndex++) {
+                    rowColumnSwitched[frameIndex][yIndex][xIndex] = data.pixels()[frameIndex][xIndex][yIndex];
+                }
+            }
+        }
+
+        for (PixelInformation[][] frame : rowColumnSwitched) {
             for (PixelInformation[] row : frame) {
                 for (PixelInformation pixel : row) {
                     bitStream.write(pixel.type().flag(), 3);
