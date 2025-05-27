@@ -116,6 +116,8 @@ public class ImageDataDecoder {
             }
         }
 
+        bitStream.skipBytePadding();
+
         return new ImageData(pixels, null);
     }
 
