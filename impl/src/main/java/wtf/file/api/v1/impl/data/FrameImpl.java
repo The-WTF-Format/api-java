@@ -61,8 +61,7 @@ public class FrameImpl implements Frame {
                 Pixel pixel = pixels[x][y].withColorSpace(rgbSpace).withWidth(8);
                 Map<ColorChannel, Short> values = pixel.values();
 
-                short alpha = values.get(alphaChannel),
-                    red = values.get(ColorSpaceChannels.RED),
+                short red = values.get(ColorSpaceChannels.RED),
                     green = values.get(ColorSpaceChannels.GREEN),
                     blue = values.get(ColorSpaceChannels.BLUE);
 
@@ -70,11 +69,11 @@ public class FrameImpl implements Frame {
                 switch (alphaChannel) {
                     case null -> rgbValue = (red & 0xFF) << 16 | (green & 0xFF) << 8 | (blue & 0xFF);
                     case FixedColorChannel fixedColorChannel when fixedColorChannel.bits() == 1 -> {
-                        int actualAlpha = alpha * 255;
+                        int actualAlpha = values.get(alphaChannel) * 255;
                         rgbValue = (actualAlpha & 0xFF) << 24 | (red & 0xFF) << 16 | (green & 0xFF) << 8 | (blue & 0xFF);
                     }
                     case DynamicColorChannel ignored ->
-                        rgbValue = (alpha & 0xFF) << 24 | (red & 0xFF) << 16 | (green & 0xFF) << 8 | (blue & 0xFF);
+                        rgbValue = (values.get(alphaChannel) & 0xFF) << 24 | (red & 0xFF) << 16 | (green & 0xFF) << 8 | (blue & 0xFF);
                     default ->
                         throw new IllegalStateException("Alpha channels of fixed size with more than 1 bit are currently not supported.");
                 }

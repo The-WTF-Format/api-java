@@ -15,12 +15,12 @@ public class YCbCrTransformer implements Transformer{
 
     @Override
     public Map<ColorChannel, Short> toRgb(Map<ColorChannel, Short> values, int channelWidth) {
-        short y = values.get(LUMA), cb = values.get(CHROMA_BLUE), cr = values.get(CHROMA_RED);
+        short y = values.get(LUMA);
 
         int maxValue = NumberUtil.getMaxValue(channelWidth);
 
-        cb -= (short) (maxValue / 2);
-        cr -= (short) (maxValue / 2);
+        int cb = values.get(CHROMA_BLUE) - (maxValue / 2);
+        int cr = values.get(CHROMA_RED) - (maxValue / 2);
 
         short r = (short) (y + 1.402 * cr);
         short g = (short) (y - 0.34414 * cb - 0.71414 * cr);
@@ -43,9 +43,9 @@ public class YCbCrTransformer implements Transformer{
         int cb = (int) ((-0.1687 * r - 0.3313 * g + 0.5 * b) + ((double) maxValue / 2));
         int cr = (int) ((0.5 * r - 0.4187 * g - 0.0813 * b) + ((double) maxValue / 2));
 
-        y = (short) Math.min(Math.max(y, 0), maxValue);
-        cb = (short) Math.min(Math.max(cb, 0), maxValue);
-        cr = (short) Math.min(Math.max(cr, 0), maxValue);
+        y = Math.min(Math.max(y, 0), maxValue);
+        cb = Math.min(Math.max(cb, 0), maxValue);
+        cr = Math.min(Math.max(cr, 0), maxValue);
 
         return Map.of(LUMA, (short) y, CHROMA_BLUE, (short) cb, CHROMA_RED, (short) cr);
     }
