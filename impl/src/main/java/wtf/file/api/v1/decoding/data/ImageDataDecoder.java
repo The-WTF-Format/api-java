@@ -27,7 +27,7 @@ public class ImageDataDecoder {
             clutInformation.codeLength(),
             headerInformation.frames(), headerInformation.height(), headerInformation.width()
         );
-        PixelInformation[][][] pixels = new PixelInformation[headerInformation.frames()][headerInformation.height()][headerInformation.width()];
+        PixelInformation[][][] pixels = new PixelInformation[headerInformation.frames()][headerInformation.width()][headerInformation.height()];
 
         for (int frame = 0; frame < headerInformation.frames(); frame++) {
             for (int y = 0; y < headerInformation.height(); y++) {
