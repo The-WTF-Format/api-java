@@ -56,6 +56,8 @@ public class EditableAnimationInformationImpl implements EditableAnimationInform
 
             for (int i = 0; i < delta; i++) {
                 int frame = this.pixels.length - delta + i;
+                this.pixels[frame] = new EditablePixel[this.pixels[0].length][this.pixels[0][0].length];
+
                 for (int x = 0; x < this.pixels[frame].length; x++) {
                     for (int y = 0; y < this.pixels[frame][x].length; y++) {
                         this.pixels[frame][x][y] = new EditablePixelImpl(defaultValues, colorSpace, channelWidth);
@@ -126,6 +128,8 @@ public class EditableAnimationInformationImpl implements EditableAnimationInform
 
             for (int i = 0; i < delta; i++) {
                 int x = this.pixels[frame].length - delta + i;
+                this.pixels[frame][x] = new EditablePixel[this.pixels[frame][0].length];
+
                 for (int y = 0; y < this.pixels[frame][x].length; y++) {
                     this.pixels[frame][x][y] = new EditablePixelImpl(
                         ColorUtil.getDefaultColors(colorSpace, channelWidth),
